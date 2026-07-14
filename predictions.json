@@ -1,10 +1,14 @@
 {
-  "_note": "Vision-model first-pass block predictions, keyed by page index (0-based). Internal pixel format @ 1707x1650. The app's 'AI first pass' button drops the current page's prediction onto the canvas for hand-tuning. Overrides auto_blocks.json where present.",
+  "_note": "Vision-model first-pass block predictions, keyed by page index (0-based). Internal pixel format @ 1707x1650. The app auto-fills any empty page that has a prediction (and 'AI first pass' re-applies it). Sized to ENCLOSE content per EJ's page-2 lesson: full extent + small pad, one block per region (don't over-split).",
   "predictions": {
     "1": [
-      { "cls": "filler",  "x": 75,  "y": 148,  "w": 370,  "h": 1115 },
-      { "cls": "filler",  "x": 75,  "y": 1288, "w": 370,  "h": 287 },
-      { "cls": "article", "x": 470, "y": 100,  "w": 1162, "h": 1475, "role": "lead" }
+      { "cls": "filler",  "x": 75,  "y": 100, "w": 370,  "h": 1499 },
+      { "cls": "article", "x": 470, "y": 100, "w": 1162, "h": 1499, "role": "lead" }
+    ],
+    "2": [
+      { "cls": "article", "x": 75,  "y": 100, "w": 1557, "h": 758, "role": "lead" },
+      { "cls": "ad",      "x": 75,  "y": 862, "w": 755,  "h": 736 },
+      { "cls": "ad",      "x": 866, "y": 862, "w": 766,  "h": 736 }
     ]
   }
 }

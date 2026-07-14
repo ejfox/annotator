@@ -150,8 +150,10 @@ function collectAnnotations(){ const a={};
 let persistT=null;
 function persist(){ S.project.title=$("#projTitle").value||"Untitled";
   S.project.paperId=S.paperId; S.project.annotations=collectAnnotations();
-  try{ localStorage.setItem(LS_PROJ,JSON.stringify(S.project)); setSave("ok"); }
+  const payload=JSON.stringify(S.project);
+  try{ localStorage.setItem(LS_PROJ,payload); setSave("ok"); }
   catch(e){ setSave("err"); toast("Save failed — storage full? Export your JSON."); }
+  fetch("/api/save",{method:"POST",headers:{"Content-Type":"application/json"},body:payload}).catch(()=>{}); // local disk mirror
 }
 function save(){ setSave("dirty"); clearTimeout(persistT); persistT=setTimeout(persist,300); }
 function setSave(k){ const e=$("#save");
@@ -761,8 +763,11 @@ function toggleAndSave(which){ if(which==="grid"){ S.grid=!S.grid; renderGrid();
 async function boot(){
   await loadConfig(); loadPrefs(); buildPalette(); bindUI();
   let pr=null;
-  try{ const raw=localStorage.getItem(LS_PROJ); if(raw) pr=JSON.parse(raw); }catch(e){}
+  // local disk (serve.py) is the source of truth when available — same state in every tab/profile
+  try{ const d=await (await fetch("/api/load",{cache:"no-store"})).json(); if(d&&d.pages&&d.pages.length) pr=d; }catch(e){}
+  if(!pr){ try{ const raw=localStorage.getItem(LS_PROJ); if(raw) pr=JSON.parse(raw); }catch(e){} }
   if(!pr||!pr.pages||!pr.pages.length) pr=JSON.parse(JSON.stringify(SAMPLE));
-  await loadProject(pr); if(!localStorage.getItem(LS_PROJ)) persist();
+  await loadProject(pr);
+  persist(); // mirror loaded state to localStorage + disk
 }
 boot();
