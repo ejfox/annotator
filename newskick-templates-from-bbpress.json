@@ -1,0 +1,390 @@
+{
+  "version": 1,
+  "updatedAt": 1784071749166,
+  "updatedBy": "annotator-ai",
+  "_note": "Page templates distilled from Beach & Bay Press 5/8/26 (16pp/61 blocks) by the NewsWell Annotator. NewsWell PageTemplate schema; import via the template library. origin='ai'.",
+  "templates": [
+    {
+      "id": "352f839a",
+      "name": "BBPRESS_SPLIT_EDITORIAL_LEFT",
+      "type": "ad-editorial",
+      "description": "\u00bd vertical fold \u2014 lead story left, two stacked ads right.",
+      "section": "Inside \u00b7 Split",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "b66c84e5",
+          "kind": "editorial",
+          "x": 0,
+          "y": 0,
+          "width": 367.5,
+          "height": 713,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        },
+        {
+          "id": "c35146a1",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 0,
+          "width": 367.5,
+          "height": 350
+        },
+        {
+          "id": "db67033d",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 362,
+          "width": 367.5,
+          "height": 351
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "1fd602e7",
+      "name": "BBPRESS_SPLIT_EDITORIAL_RIGHT",
+      "type": "ad-editorial",
+      "description": "\u00bd vertical fold \u2014 full-height ad left, lead story right.",
+      "section": "Inside \u00b7 Split",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "9c6616c4",
+          "kind": "ad",
+          "x": 0,
+          "y": 0,
+          "width": 367.5,
+          "height": 713
+        },
+        {
+          "id": "3cff9d0d",
+          "kind": "editorial",
+          "x": 379.5,
+          "y": 0,
+          "width": 367.5,
+          "height": 713,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "52ca7aa6",
+      "name": "BBPRESS_LEAD_TOP_ADS_BOTTOM",
+      "type": "ad-editorial",
+      "description": "\u00bd horizontal fold \u2014 full-width lead on top, ad row across the bottom.",
+      "section": "Inside \u00b7 Top story",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "037c40da",
+          "kind": "editorial",
+          "x": 0,
+          "y": 0,
+          "width": 747,
+          "height": 350,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        },
+        {
+          "id": "4ee484c6",
+          "kind": "ad",
+          "x": 0,
+          "y": 362,
+          "width": 367.5,
+          "height": 351
+        },
+        {
+          "id": "b49635fb",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 362,
+          "width": 367.5,
+          "height": 351
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "fbca9610",
+      "name": "BBPRESS_NEWS_ADGRID",
+      "type": "ad-editorial",
+      "description": "News band up top, 4\u00d72 matrix of small ads below (service-directory page).",
+      "section": "Inside \u00b7 Ad grid",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "838656df",
+          "kind": "editorial",
+          "x": 0,
+          "y": 0,
+          "width": 747,
+          "height": 340,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        },
+        {
+          "id": "fd7a351c",
+          "kind": "ad",
+          "x": 0,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "db1225c1",
+          "kind": "ad",
+          "x": 189.75,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "9ce3caaf",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "ff8e1a1a",
+          "kind": "ad",
+          "x": 569.25,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "edcfa4b1",
+          "kind": "ad",
+          "x": 0,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "73a069ea",
+          "kind": "ad",
+          "x": 189.75,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "1a9640e1",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "8c2881cc",
+          "kind": "ad",
+          "x": 569.25,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "c090e34f",
+      "name": "BBPRESS_CLASSIFIEDS_ADGRID",
+      "type": "ad",
+      "description": "Classifieds/legals filler up top, 4\u00d72 ad matrix below.",
+      "section": "Inside \u00b7 Ad grid",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "566e9f37",
+          "kind": "filler",
+          "x": 0,
+          "y": 0,
+          "width": 747,
+          "height": 340,
+          "label": "Community classifieds / legals"
+        },
+        {
+          "id": "9d756e92",
+          "kind": "ad",
+          "x": 0,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "bf5a1ff8",
+          "kind": "ad",
+          "x": 189.75,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "64632519",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "2e480608",
+          "kind": "ad",
+          "x": 569.25,
+          "y": 352,
+          "width": 177.75,
+          "height": 170
+        },
+        {
+          "id": "3fd0af39",
+          "kind": "ad",
+          "x": 0,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "06cfe30b",
+          "kind": "ad",
+          "x": 189.75,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "4235b681",
+          "kind": "ad",
+          "x": 379.5,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        },
+        {
+          "id": "70523737",
+          "kind": "ad",
+          "x": 569.25,
+          "y": 534,
+          "width": 177.75,
+          "height": 179
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "ce871a40",
+      "name": "BBPRESS_STACKED_FEATURES",
+      "type": "ad-editorial",
+      "description": "Two full-width stories stacked, no ads.",
+      "section": "Inside \u00b7 Editorial",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "50d4f6ee",
+          "kind": "editorial",
+          "x": 0,
+          "y": 0,
+          "width": 747,
+          "height": 350,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        },
+        {
+          "id": "cad381c6",
+          "kind": "editorial",
+          "x": 0,
+          "y": 362,
+          "width": 747,
+          "height": 351,
+          "role": "secondary",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.3
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    },
+    {
+      "id": "1e13df7d",
+      "name": "BBPRESS_MASTHEAD_STORY",
+      "type": "ad-editorial",
+      "description": "Standing masthead/staff rail (filler) left, lead story right.",
+      "section": "Inside \u00b7 Utility",
+      "pageWidth": 747,
+      "pageHeight": 713,
+      "blocks": [
+        {
+          "id": "8e4e0837",
+          "kind": "filler",
+          "x": 0,
+          "y": 0,
+          "width": 367.5,
+          "height": 713,
+          "label": "Masthead / staff box"
+        },
+        {
+          "id": "2158d481",
+          "kind": "editorial",
+          "x": 379.5,
+          "y": 0,
+          "width": 367.5,
+          "height": 713,
+          "role": "lead",
+          "requiresPhoto": true,
+          "imageLayout": "top",
+          "imageRatio": 0.4
+        }
+      ],
+      "origin": "ai",
+      "createdAt": 1784071749166,
+      "updatedAt": 1784071749166,
+      "createdBy": null,
+      "updatedBy": null
+    }
+  ]
+}
