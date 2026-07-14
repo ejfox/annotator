@@ -1,0 +1,14 @@
+{
+  "id": "beach-and-bay-2026-05-08",
+  "title": "Beach & Bay Press — May 8 2026",
+  "source": "beach-and-bay-press-may-8-2026.pdf",
+  "paperId": "newswell-819x792",
+  "imageW": 1707,
+  "imageH": 1650,
+  "pageBase": "samples/beach-and-bay-press-2026-05-08/pages/",
+  "pages": [
+    "p-01.png","p-02.png","p-03.png","p-04.png","p-05.png","p-06.png","p-07.png","p-08.png",
+    "p-09.png","p-10.png","p-11.png","p-12.png","p-13.png","p-14.png","p-15.png","p-16.png"
+  ],
+  "annotationsSeed": "annotations.seed.json"
+}

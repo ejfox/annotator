@@ -1,0 +1,22 @@
+{
+  "_note": "NewsWell paper geometry presets. Coordinates in PostScript points (72pt = 1in). Grid column edges are derived in-app from columns/colWidthPts/gutterPts starting at marginL. Source: newswell-studio/app/composables/usePaperSizes.ts",
+  "defaultPaper": "newswell-819x792",
+  "papers": {
+    "newswell-819x792": {
+      "label": "NewsWell Tab (819 × 792)",
+      "pageW": 819,
+      "pageH": 792,
+      "marginL": 36,
+      "marginR": 36,
+      "marginT": 43,
+      "marginB": 36,
+      "baseline": 12,
+      "defaultGrid": "4",
+      "grids": {
+        "4":  { "label": "4-col",  "columns": 4,  "colWidthPts": 177.75, "gutterPts": 12 },
+        "10": { "label": "10-col", "columns": 10, "colWidthPts": 63.9,   "gutterPts": 12 }
+      },
+      "titles": ["Beach & Bay Press", "Peninsula Beacon", "La Jolla Village News", "Times of San Diego (print)"]
+    }
+  }
+}
