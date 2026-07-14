@@ -20,9 +20,21 @@ Model guessed **3** blocks; EJ kept **2**:
 3. Story photos stay **inside** the article block (not separate wild-art) — held from page 1, unchallenged on page 2.
 4. Dominant/sole story on a page → role **lead**.
 
-## Page 3 — model v2 prediction (applying the above)
+## Page 3 — model v2: ACCEPTED VERBATIM ✅
 
-3 blocks: full-width **article/lead** (permits story + inline beach photo, top ~half,
-x75→1632, enclosed y100→858) + **two ads** bottom (Marc Mabile attorney left,
-Broken Yolk "Ciabatta" right), each sized to enclose to the page bottom (~y1598).
-Awaiting EJ's tune to confirm the ad split + article/ad boundary.
+3 blocks (full-width **article/lead** + **two ads** bottom). EJ kept it with **zero
+edits** — his saved page 3 == the prediction, byte for byte. The page-2 rules
+(one-block-per-region + enclose-fully) generalized perfectly. First clean hit.
+
+## Page 4 — model v3 prediction (4 regions)
+
+Busier page. Predicted: full-width **article/brief** band up top (community briefs:
+VOTE AT PB LIBRARY / EMPTY THE SHELTERS) + left-half **article/secondary** (the
+"Summer Camps & Activities" editorial section, cols 1–2, to page bottom) + **two
+stacked ads** on the right (PB Arts Center camps ad, then the big Jr. Theatre
+"Summer Camps" ad).
+Open judgment calls to watch EJ's edits on:
+- The "BE A PART OF THE NEXT SUMMER CAMPS SECTION / contact us" promo box is folded
+  into the left editorial block — is it its own `ad`/`filler`?
+- Is the "Summer Camps & Activities" section editorial (`article`) or advertorial?
+- Top briefs as one `brief` block vs split.
