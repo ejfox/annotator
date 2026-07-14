@@ -1,0 +1,64 @@
+{
+  "_note": "Page templates distilled from the Beach & Bay Press 5/8/26 issue (16 pages, 61 blocks). Coordinates in POINTS, content-relative (origin = top-left inside margins; content area 747 x 713). Everything snaps to the quarter grid: vertical x = 0, 189.75, 379.5, 569.25, 747 (4-col) with the ½ fold at ~373.5; horizontal y = 0, 356.5, 535, 713. Feed these to the annotator as one-click page skeletons ('start from template'), then tune. kind = NewsWell TemplateBlockKind.",
+  "grid": {
+    "verticalFolds":   [0, 189.75, 373.5, 379.5, 569.25, 747],
+    "horizontalFolds": [0, 356.5, 535, 713],
+    "master": "the 50% fold on both axes"
+  },
+  "templates": {
+    "split": {
+      "label": "A · The Split",
+      "desc": "Vertical ½ fold — editorial one side, stacked ads the other. Issue workhorse (pp 5,7,8,10,11). Mirror by swapping kinds.",
+      "pages": [5, 7, 8, 10, 11],
+      "blocks": [
+        { "kind": "editorial", "x": 0,     "y": 0,   "w": 367.5, "h": 713, "role": "lead" },
+        { "kind": "ad",        "x": 379.5, "y": 0,   "w": 367.5, "h": 351 },
+        { "kind": "ad",        "x": 379.5, "y": 362, "w": 367.5, "h": 351 }
+      ]
+    },
+    "top-story-bottom-ads": {
+      "label": "B · Top Story / Bottom Ads",
+      "desc": "Horizontal ½ fold — full-width lead on top, ad row across the bottom (pp 3,14,15,16).",
+      "pages": [3, 14, 15, 16],
+      "blocks": [
+        { "kind": "editorial", "x": 0,     "y": 0,   "w": 747,   "h": 351, "role": "lead" },
+        { "kind": "ad",        "x": 0,     "y": 362, "w": 367.5, "h": 351 },
+        { "kind": "ad",        "x": 379.5, "y": 362, "w": 367.5, "h": 351 }
+      ]
+    },
+    "ad-grid": {
+      "label": "C · The Ad Grid",
+      "desc": "Header band (article or classifieds filler) + 4-col x 2-row ad matrix on the quarter grid (pp 9,12).",
+      "pages": [9, 12],
+      "blocks": [
+        { "kind": "editorial", "x": 0,      "y": 0,   "w": 747,    "h": 351 },
+        { "kind": "ad", "x": 0,      "y": 362, "w": 177.75, "h": 165 },
+        { "kind": "ad", "x": 189.75, "y": 362, "w": 177.75, "h": 165 },
+        { "kind": "ad", "x": 379.5,  "y": 362, "w": 177.75, "h": 165 },
+        { "kind": "ad", "x": 569.25, "y": 362, "w": 177.75, "h": 165 },
+        { "kind": "ad", "x": 0,      "y": 540, "w": 177.75, "h": 173 },
+        { "kind": "ad", "x": 189.75, "y": 540, "w": 177.75, "h": 173 },
+        { "kind": "ad", "x": 379.5,  "y": 540, "w": 177.75, "h": 173 },
+        { "kind": "ad", "x": 569.25, "y": 540, "w": 177.75, "h": 173 }
+      ]
+    },
+    "stacked-features": {
+      "label": "D · Stacked Features",
+      "desc": "Two full-width stories stacked, no ads (p 6).",
+      "pages": [6],
+      "blocks": [
+        { "kind": "editorial", "x": 0, "y": 0,   "w": 747, "h": 351, "role": "lead" },
+        { "kind": "editorial", "x": 0, "y": 362, "w": 747, "h": 351, "role": "secondary" }
+      ]
+    },
+    "utility": {
+      "label": "E · Utility",
+      "desc": "Filler-dominant standing matter — masthead rail + story (p2), or legals/puzzles (p13). Vertical ½ fold, filler one side.",
+      "pages": [2, 13],
+      "blocks": [
+        { "kind": "filler",    "x": 0,     "y": 0, "w": 367.5, "h": 713 },
+        { "kind": "editorial", "x": 379.5, "y": 0, "w": 367.5, "h": 713, "role": "lead" }
+      ]
+    }
+  }
+}
