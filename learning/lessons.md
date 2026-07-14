@@ -45,3 +45,15 @@ exact same top/bottom line.** No re-classification needed — judgment calls wer
 Left-half **article/lead** (homeless-count story, full height) + two stacked right-side
 **ads** (RealestAgent realtor top, PB Elementary "Platinum Sponsors" bottom). Tops
 aligned at y116, ad divider at ~y488, all enclosed to the page bottom.
+
+## Full-issue pass (pages 6–16) — model v-final
+
+Predicted all remaining pages in two batches, HMR-applied live. 61 blocks total
+across 16 pages. Patterns held: full-width lead + stacked stories, left/right
+editorial-vs-ad splits, ad grids as separate ad blocks, classifieds/legals/puzzles
+as filler. **Judgment calls flagged for EJ's review (highest learning value):**
+- p12 / p11: multi-ad service grids drawn as separate `ad` blocks (8 & 8) — group instead?
+- p13: puzzles/legals page went coarse (legals filler + games filler + sudoku + IG ad).
+- p7 / p10 / p11: small bordered briefs (SeaWorld Drone Shows, Mt. Soledad) folded
+  into the adjacent article — pull out as their own block?
+- p6: two stacked features labeled lead + secondary — both secondary?
