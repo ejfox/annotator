@@ -1,14 +1,15 @@
 {
   "version": 1,
-  "updatedAt": 1784071749166,
+  "updatedAt": 1784071930454,
   "updatedBy": "annotator-ai",
-  "_note": "Page templates distilled from Beach & Bay Press 5/8/26 (16pp/61 blocks) by the NewsWell Annotator. NewsWell PageTemplate schema; import via the template library. origin='ai'.",
+  "_note": "Page templates distilled from Beach & Bay Press, May 8 2026 (16pp / 61 annotated blocks) by the NewsWell Annotator. Page 1 hand-annotated by EJ; pp.2-4 hand-tuned; pp.5-16 model-predicted. Every block edge in the source issue landed on the quarter grid (x: 0/.25/.5/.75/1, y: 0/.5/.75/1) with the 50% fold dominant on both axes. NewsWell PageTemplate schema; gridColumns omitted = inherit standard 4-col. origin='ai'. Full provenance: learning/template-provenance.md",
+  "_sourceIssue": "Beach & Bay Press \u2014 May 8, 2026 (beach-and-bay-press-may-8-2026.pdf)",
   "templates": [
     {
       "id": "352f839a",
       "name": "BBPRESS_SPLIT_EDITORIAL_LEFT",
       "type": "ad-editorial",
-      "description": "\u00bd vertical fold \u2014 lead story left, two stacked ads right.",
+      "description": "\u00bd vertical fold \u2014 lead story left, two stacked ads right. From BBP 5/8/26 pp. 5, 7, 11.",
       "section": "Inside \u00b7 Split",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -43,8 +44,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -52,7 +53,7 @@
       "id": "1fd602e7",
       "name": "BBPRESS_SPLIT_EDITORIAL_RIGHT",
       "type": "ad-editorial",
-      "description": "\u00bd vertical fold \u2014 full-height ad left, lead story right.",
+      "description": "\u00bd vertical fold \u2014 full-height ad left, lead story right. From BBP 5/8/26 pp. 8, 10.",
       "section": "Inside \u00b7 Split",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -79,8 +80,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -88,7 +89,7 @@
       "id": "52ca7aa6",
       "name": "BBPRESS_LEAD_TOP_ADS_BOTTOM",
       "type": "ad-editorial",
-      "description": "\u00bd horizontal fold \u2014 full-width lead on top, ad row across the bottom.",
+      "description": "\u00bd horizontal fold \u2014 full-width lead on top, ad row across the bottom. From BBP 5/8/26 pp. 3 & 15 (2 ads), 14 (3 ads), 16 (1 full-width ad).",
       "section": "Inside \u00b7 Top story",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -123,8 +124,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -132,7 +133,7 @@
       "id": "fbca9610",
       "name": "BBPRESS_NEWS_ADGRID",
       "type": "ad-editorial",
-      "description": "News band up top, 4\u00d72 matrix of small ads below (service-directory page).",
+      "description": "News band up top, 4\u00d72 matrix of small ads below. From BBP 5/8/26 p. 9 (arts-orgs story over a 6-ad local grid; regularized to 4\u00d72).",
       "section": "Inside \u00b7 Ad grid",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -215,8 +216,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -224,7 +225,7 @@
       "id": "c090e34f",
       "name": "BBPRESS_CLASSIFIEDS_ADGRID",
       "type": "ad",
-      "description": "Classifieds/legals filler up top, 4\u00d72 ad matrix below.",
+      "description": "Classifieds/legals filler up top, 4\u00d72 ad matrix below. From BBP 5/8/26 p. 12 (Community Classifieds over the 8-ad Home Service Guide).",
       "section": "Inside \u00b7 Ad grid",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -304,8 +305,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -313,7 +314,7 @@
       "id": "ce871a40",
       "name": "BBPRESS_STACKED_FEATURES",
       "type": "ad-editorial",
-      "description": "Two full-width stories stacked, no ads.",
+      "description": "Two full-width stories stacked, no ads. From BBP 5/8/26 p. 6 (Para athlete \u2192 SDSU / Rose Creek).",
       "section": "Inside \u00b7 Editorial",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -344,8 +345,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     },
@@ -353,7 +354,7 @@
       "id": "1e13df7d",
       "name": "BBPRESS_MASTHEAD_STORY",
       "type": "ad-editorial",
-      "description": "Standing masthead/staff rail (filler) left, lead story right.",
+      "description": "Standing masthead/staff rail (filler) left, lead story right. From BBP 5/8/26 p. 2 (hand-annotated by EJ); p. 13 is the all-filler variant.",
       "section": "Inside \u00b7 Utility",
       "pageWidth": 747,
       "pageHeight": 713,
@@ -381,8 +382,8 @@
         }
       ],
       "origin": "ai",
-      "createdAt": 1784071749166,
-      "updatedAt": 1784071749166,
+      "createdAt": 1784071930454,
+      "updatedAt": 1784071930454,
       "createdBy": null,
       "updatedBy": null
     }
