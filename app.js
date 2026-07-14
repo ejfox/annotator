@@ -148,11 +148,16 @@ function buildPaperSel(){ const sel=$("#paperSel"); sel.innerHTML="";
     o.value=id; o.textContent=PAPERS[id].label; sel.appendChild(o); }
   sel.value=S.paperId; }
 
-async function loadAuto(){ // optional CV seeds served alongside the app
-  S.auto={}; try{ const j=await (await fetch("auto_blocks.json",{cache:"no-store"})).json();
+async function loadAuto(){ // vision predictions + optional CV seeds served alongside the app
+  S.auto={};
+  try{ const j=await (await fetch("auto_blocks.json",{cache:"no-store"})).json();
     for(const pg of (j.pages||[])){ const idx=pg.page-1;
       S.auto[idx]=(pg.blocks||[]).map(b=>({cls:b.cls,x:b.box[0],y:b.box[1],
-        w:b.box[2]-b.box[0],h:b.box[3]-b.box[1]})); } }catch(e){} }
+        w:b.box[2]-b.box[0],h:b.box[3]-b.box[1]})); } }catch(e){}
+  try{ const p=await (await fetch("predictions.json",{cache:"no-store"})).json(); // model first-pass overrides CV
+    const pred=p.predictions||{};
+    for(const k in pred) S.auto[+k]=pred[k].map(b=>({cls:b.cls,x:b.x,y:b.y,w:b.w,h:b.h,role:b.role}));
+  }catch(e){} }
 
 /* ============================================================ palette */
 function buildPalette(){
@@ -666,11 +671,12 @@ function bindUI(){
   $("#clearPage").onclick=()=>{ if(!S.boxes[S.page].length)return;
     if(!confirm("Delete all "+S.boxes[S.page].length+" frames on this page?"))return;
     snapshot(); S.boxes[S.page]=[]; clearSel(); renderAll(); save(); };
-  $("#importAuto").onclick=()=>{ const a=S.auto[S.page]||[]; if(!a.length){ toast("No auto blocks for this page"); return; }
+  $("#importAuto").onclick=()=>{ const a=S.auto[S.page]||[]; if(!a.length){ toast("No AI blocks for this page yet"); return; }
     snapshot(); const fb=TYPES[0].id;
     for(const b of a){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
-      S.boxes[S.page].push({id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}); }
-    renderAll(); save(); toast("Imported "+a.length+" auto blocks"); };
+      const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role;
+      S.boxes[S.page].push(nb); }
+    clearSel(); renderAll(); save(); toast("AI first pass: "+a.length+" blocks — tune away"); };
   $("#exportJson").onclick=()=>download((S.project.id||"annotations")+".newswell.json",JSON.stringify(exportData(),null,2));
   $("#newProj").onclick=()=>$("#fileImgs").dataset.mode="new",$("#fileImgs").click();
   $("#importImgs").onclick=()=>{ $("#fileImgs").dataset.mode="append"; $("#fileImgs").click(); };

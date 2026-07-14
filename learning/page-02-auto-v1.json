@@ -1,0 +1,21 @@
+{
+  "page": 2,
+  "pageIndex": 1,
+  "model": "claude-opus-4-8 (vision)",
+  "predictedAt": "2026-07-14",
+  "imageSize": [1707, 1650],
+  "trainedOn": "page-01 hand annotation (8 blocks): what-inside=left teaser rail; article=story+its photo (lead for dominant package, secondary else); ad=realtor/restaurant/coupon units; region-scale not paragraph-scale",
+  "reasoning": "Inside page, single dominant story. Left column is the newspaper's standing masthead/staff box + a house newsletter/NewsWell promo (not paid ads) -> filler. The rest (headline spanning cols 2-4, multi-column body, Tyler Becker pull-quote, and the groundbreaking photo w/ caption) is ONE article; kept the photo inside the article per page-1 convention. Called it 'lead' as the page's main story. Coordinates roughly grid-snapped (col1 = x75-445, col2 left = x470, right margin x1632).",
+  "predicted": [
+    { "cls": "filler",  "x": 75,  "y": 148,  "w": 370,  "h": 1115, "note": "masthead / staff box (address, WHO WE ARE, editors, submissions, letters)", "confidence": 0.7 },
+    { "cls": "filler",  "x": 75,  "y": 1288, "w": 370,  "h": 287,  "note": "house promo: newsletter QR + ASU NewsWell + donate", "confidence": 0.55 },
+    { "cls": "article", "x": 470, "y": 100,  "w": 1162, "h": 1475, "role": "lead", "note": "Fanuel Park / Mission Bay improvements — headline, body, pull-quote, photo+caption", "confidence": 0.85 }
+  ],
+  "uncertainties": [
+    "Is the whole left rail one 'filler' block or split staff-box vs house-promo? (guessed split)",
+    "Is 'filler' the right kind for standing masthead matter, or should NewsWell have a 'masthead'/'staff' kind?",
+    "Should the big construction photo be its own 'wild-art' block, or stay inside the article? (kept inside, per page 1)",
+    "Article role: 'lead' vs 'secondary' on an inside page",
+    "Should the folio/running head (page no. + URL) be a block at all? (omitted)"
+  ]
+}

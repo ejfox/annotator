@@ -1,0 +1,10 @@
+{
+  "_note": "Vision-model first-pass block predictions, keyed by page index (0-based). Internal pixel format @ 1707x1650. The app's 'AI first pass' button drops the current page's prediction onto the canvas for hand-tuning. Overrides auto_blocks.json where present.",
+  "predictions": {
+    "1": [
+      { "cls": "filler",  "x": 75,  "y": 148,  "w": 370,  "h": 1115 },
+      { "cls": "filler",  "x": 75,  "y": 1288, "w": 370,  "h": 287 },
+      { "cls": "article", "x": 470, "y": 100,  "w": 1162, "h": 1475, "role": "lead" }
+    ]
+  }
+}
