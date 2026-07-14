@@ -33,8 +33,15 @@ VOTE AT PB LIBRARY / EMPTY THE SHELTERS) + left-half **article/secondary** (the
 "Summer Camps & Activities" editorial section, cols 1–2, to page bottom) + **two
 stacked ads** on the right (PB Arts Center camps ad, then the big Jr. Theatre
 "Summer Camps" ad).
-Open judgment calls to watch EJ's edits on:
-- The "BE A PART OF THE NEXT SUMMER CAMPS SECTION / contact us" promo box is folded
-  into the left editorial block — is it its own `ad`/`filler`?
-- Is the "Summer Camps & Activities" section editorial (`article`) or advertorial?
-- Top briefs as one `brief` block vs split.
+**Result:** structure + all classifications accepted (kept 4 blocks, both ads,
+summer-camps-as-editorial, folded promo, briefs-as-one). EJ fixed only **alignment**:
+brief-band bottom 495→459, second-row tops 510→489 (left editorial + top ad moved
+up together). → **New rule 3 (refined): region/row boundaries sit at the true
+content edge (my estimates ran ~20–40px low), and side-by-side blocks share the
+exact same top/bottom line.** No re-classification needed — judgment calls were all right.
+
+## Page 5 — model v4 prediction
+
+Left-half **article/lead** (homeless-count story, full height) + two stacked right-side
+**ads** (RealestAgent realtor top, PB Elementary "Platinum Sponsors" bottom). Tops
+aligned at y116, ad divider at ~y488, all enclosed to the page bottom.

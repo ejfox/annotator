@@ -1,5 +1,5 @@
 {
-  "_note": "Vision-model first-pass block predictions, keyed by page index (0-based). Internal pixel format @ 1707x1650. The app auto-fills any empty page that has a prediction (and 'AI first pass' re-applies it). Sized to ENCLOSE content per EJ's page-2 lesson: full extent + small pad, one block per region (don't over-split).",
+  "_note": "Vision-model first-pass block predictions, keyed by page index (0-based). Internal pixel format @ 1707x1650. The app auto-fills any empty page that has a prediction (and 'AI first pass' re-applies it). Rules learned from EJ: (1) one block per region, don't over-split; (2) enclose content fully past nominal margins; (3) row/region boundaries sit at the true content edge and side-by-side blocks share the same top/bottom line.",
   "predictions": {
     "1": [
       { "cls": "filler",  "x": 75,  "y": 100, "w": 370,  "h": 1499 },
@@ -11,10 +11,15 @@
       { "cls": "ad",      "x": 866, "y": 862, "w": 766,  "h": 736 }
     ],
     "3": [
-      { "cls": "article", "x": 75,  "y": 95,  "w": 1557, "h": 400,  "role": "brief" },
-      { "cls": "article", "x": 75,  "y": 510, "w": 766,  "h": 1088, "role": "secondary" },
-      { "cls": "ad",      "x": 866, "y": 510, "w": 766,  "h": 322 },
+      { "cls": "article", "x": 75,  "y": 95,  "w": 1557, "h": 364,  "role": "brief" },
+      { "cls": "article", "x": 75,  "y": 489, "w": 766,  "h": 1109, "role": "secondary" },
+      { "cls": "ad",      "x": 866, "y": 489, "w": 766,  "h": 343 },
       { "cls": "ad",      "x": 866, "y": 840, "w": 766,  "h": 758 }
+    ],
+    "4": [
+      { "cls": "article", "x": 75,  "y": 116, "w": 766, "h": 1482, "role": "lead" },
+      { "cls": "ad",      "x": 866, "y": 116, "w": 766, "h": 368 },
+      { "cls": "ad",      "x": 866, "y": 492, "w": 766, "h": 1106 }
     ]
   }
 }
