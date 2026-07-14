@@ -44,9 +44,6 @@ const SAMPLE = {
 
 const LS_PROJ = "nwannot.project.v1";
 const LS_PREFS = "nwannot.prefs.v1";
-const AUTO_MAP = {editorial:"article",body:"article",headline:"article",article:"article",
-  photo:"wild-art",image:"wild-art","wild-art":"wild-art","what-inside":"what-inside",
-  ad:"ad",header:"filler",filler:"filler"};
 
 /* ============================================================ state */
 let PAPERS = FALLBACK_PAPERS, TYPES = FALLBACK_TYPES;
@@ -56,7 +53,7 @@ let edgeCache = {};
 
 const S = {
   project:null, paperId:null, paper:null,
-  page:0, boxes:{}, auto:{}, pred:{}, undo:{}, redo:{}, uid:1,
+  page:0, boxes:{}, pred:{}, undo:{}, redo:{}, uid:1,
   sel:[], primary:null, hover:null, clip:[],
   natW:1, natH:1, zoom:1,
   snap:true, edgesOn:false, grid:false, gridMode:"4", defaultRole:{},
@@ -121,7 +118,7 @@ async function loadProject(pr){
   S.project=pr; S.paperId=pr.paperId in PAPERS?pr.paperId:Object.keys(PAPERS)[0];
   S.paper=PAPERS[S.paperId];
   if(!S.paper.grids[S.gridMode]) S.gridMode=S.paper.defaultGrid||Object.keys(S.paper.grids)[0];
-  NPAGES=pr.pages.length; S.boxes={}; S.undo={}; S.redo={}; S.auto={}; edgeCache={};
+  NPAGES=pr.pages.length; S.boxes={}; S.undo={}; S.redo={}; edgeCache={};
   for(let i=0;i<NPAGES;i++){
     const src=pr.annotations[i]||pr.annotations[String(i)]||[];
     S.boxes[i]=src.map(b=>({id:S.uid++,...normBox(b)})); S.undo[i]=[]; S.redo[i]=[];
@@ -136,7 +133,7 @@ async function loadProject(pr){
     for(let i=0;i<NPAGES;i++){
       if(S.boxes[i].length||pr.seeded[i]||!(S.pred[i]&&S.pred[i].length)) continue;
       const fb=TYPES[0].id;
-      for(const b of S.pred[i]){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
+      for(const b of S.pred[i]){ let cls=b.cls; if(!COLOR[cls])cls=fb;
         const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role; S.boxes[i].push(nb); }
       pr.seeded[i]=true; seeded=true;
     }
@@ -164,12 +161,8 @@ function buildPaperSel(){ const sel=$("#paperSel"); sel.innerHTML="";
     o.value=id; o.textContent=PAPERS[id].label; sel.appendChild(o); }
   sel.value=S.paperId; }
 
-async function loadAuto(){ // CV seeds (auto_blocks) and vision predictions, kept SEPARATE
-  S.auto={}; S.pred={};
-  try{ const j=await (await fetch("auto_blocks.json",{cache:"no-store"})).json();
-    for(const pg of (j.pages||[])){ const idx=pg.page-1;
-      S.auto[idx]=(pg.blocks||[]).map(b=>({cls:b.cls,x:b.box[0],y:b.box[1],
-        w:b.box[2]-b.box[0],h:b.box[3]-b.box[1]})); } }catch(e){}
+async function loadAuto(){ // model first-pass predictions served alongside the app
+  S.pred={};
   try{ const p=await (await fetch("predictions.json",{cache:"no-store"})).json();
     const pred=p.predictions||{};
     for(const k in pred) S.pred[+k]=pred[k].map(b=>({cls:b.cls,x:b.x,y:b.y,w:b.w,h:b.h,role:b.role}));
@@ -687,9 +680,9 @@ function bindUI(){
   $("#clearPage").onclick=()=>{ if(!S.boxes[S.page].length)return;
     if(!confirm("Delete all "+S.boxes[S.page].length+" frames on this page?"))return;
     snapshot(); S.boxes[S.page]=[]; clearSel(); renderAll(); save(); };
-  $("#importAuto").onclick=()=>{ const a=S.pred[S.page]||S.auto[S.page]||[]; if(!a.length){ toast("No AI blocks for this page yet"); return; }
+  $("#importAuto").onclick=()=>{ const a=S.pred[S.page]||[]; if(!a.length){ toast("No AI blocks for this page yet"); return; }
     snapshot(); const fb=TYPES[0].id;
-    for(const b of a){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
+    for(const b of a){ let cls=b.cls; if(!COLOR[cls])cls=fb;
       const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role;
       S.boxes[S.page].push(nb); }
     clearSel(); renderAll(); save(); toast("AI first pass: "+a.length+" blocks — tune away"); };
@@ -770,7 +763,7 @@ async function hotApplyPredictions(){
   for(let i=0;i<NPAGES;i++){
     if(S.boxes[i].length || !(S.pred[i]&&S.pred[i].length)) continue;
     const fb=TYPES[0].id;
-    for(const b of S.pred[i]){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
+    for(const b of S.pred[i]){ let cls=b.cls; if(!COLOR[cls])cls=fb;
       const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role; S.boxes[i].push(nb); }
     S.project.seeded=S.project.seeded||{}; S.project.seeded[i]=true;
     filled++; if(i===S.page) here=true;
