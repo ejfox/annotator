@@ -759,6 +759,36 @@ addEventListener("keyup",e=>{ if(e.key===" "){ S.space=false; canvas.classList.r
 function toggleAndSave(which){ if(which==="grid"){ S.grid=!S.grid; renderGrid(); }
   else if(which==="snap"){ S.snap=!S.snap; } updateToggleUI(); savePrefs(); }
 
+/* ============================================================ live reload (HMR-ish)
+ * Polls /api/version (local dev server only). Code change -> full reload;
+ * predictions change -> hot-apply new predictions to empty pages, no reload.
+ * No-ops silently when the endpoint is absent (static deploy). */
+let _ver=null;
+async function hotApplyPredictions(){
+  await loadAuto();
+  let filled=0, here=false;
+  for(let i=0;i<NPAGES;i++){
+    if(S.boxes[i].length || !(S.pred[i]&&S.pred[i].length)) continue;
+    const fb=TYPES[0].id;
+    for(const b of S.pred[i]){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
+      const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role; S.boxes[i].push(nb); }
+    S.project.seeded=S.project.seeded||{}; S.project.seeded[i]=true;
+    filled++; if(i===S.page) here=true;
+  }
+  if(filled){ renderAll(); persist(); toast("✨ auto-filled "+filled+" page"+(filled>1?"s":"")+(here?" — this one":"")); }
+}
+async function pollVersion(){
+  try{
+    const v=await (await fetch("/api/version",{cache:"no-store"})).json();
+    if(_ver && !drag){
+      if(v.code!==_ver.code){ location.reload(); return; }
+      if(v.pred!==_ver.pred){ await hotApplyPredictions(); }
+    }
+    if(!_ver || !drag) _ver=v;
+  }catch(e){ return; }              // endpoint absent (static deploy) — stop polling
+  setTimeout(pollVersion, 1200);
+}
+
 /* ============================================================ boot */
 async function boot(){
   await loadConfig(); loadPrefs(); buildPalette(); bindUI();
@@ -769,5 +799,6 @@ async function boot(){
   if(!pr||!pr.pages||!pr.pages.length) pr=JSON.parse(JSON.stringify(SAMPLE));
   await loadProject(pr);
   persist(); // mirror loaded state to localStorage + disk
+  pollVersion(); // live-reload watcher
 }
 boot();

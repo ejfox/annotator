@@ -39,6 +39,13 @@ class H(http.server.SimpleHTTPRequestHandler):
         self.wfile.write(body)
 
     def do_GET(self):
+        if self.path.startswith("/api/version"):
+            def mt(f):
+                p = os.path.join(BASE, f)
+                return round(os.path.getmtime(p), 3) if os.path.exists(p) else 0
+            return self._json({"pred": mt("predictions.json"),
+                               "code": max(mt("app.js"), mt("index.html"),
+                                           mt("types.json"), mt("papers.json"))})
         if self.path.startswith("/api/load"):
             if os.path.exists(STORE):
                 try:
@@ -64,9 +71,9 @@ class H(http.server.SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    socketserver.TCPServer.allow_reuse_address = True
+    http.server.ThreadingHTTPServer.allow_reuse_address = True
     url = f"http://localhost:{PORT}"
-    with socketserver.TCPServer(("127.0.0.1", PORT), H) as httpd:
+    with http.server.ThreadingHTTPServer(("127.0.0.1", PORT), H) as httpd:
         print(f"\n  NewsWell Annotator →  {url}")
         print(f"  Edits autosave to    →  {STORE}\n  Ctrl+C to stop.\n")
         threading.Timer(0.7, lambda: webbrowser.open(url)).start()
