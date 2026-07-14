@@ -56,7 +56,7 @@ let edgeCache = {};
 
 const S = {
   project:null, paperId:null, paper:null,
-  page:0, boxes:{}, auto:{}, undo:{}, redo:{}, uid:1,
+  page:0, boxes:{}, auto:{}, pred:{}, undo:{}, redo:{}, uid:1,
   sel:[], primary:null, hover:null, clip:[],
   natW:1, natH:1, zoom:1,
   snap:true, edgesOn:false, grid:false, gridMode:"4", defaultRole:{},
@@ -117,7 +117,7 @@ function savePrefs(){ try{ localStorage.setItem(LS_PREFS,JSON.stringify({
   snap:S.snap,edgesOn:S.edgesOn,grid:S.grid,gridMode:S.gridMode,defaultRole:S.defaultRole})); }catch(e){} }
 
 /* ============================================================ project */
-function loadProject(pr){
+async function loadProject(pr){
   S.project=pr; S.paperId=pr.paperId in PAPERS?pr.paperId:Object.keys(PAPERS)[0];
   S.paper=PAPERS[S.paperId];
   if(!S.paper.grids[S.gridMode]) S.gridMode=S.paper.defaultGrid||Object.keys(S.paper.grids)[0];
@@ -127,7 +127,21 @@ function loadProject(pr){
     S.boxes[i]=src.map(b=>({id:S.uid++,...normBox(b)})); S.undo[i]=[]; S.redo[i]=[];
   }
   $("#projTitle").value=pr.title||"Untitled";
-  buildPaperSel(); loadAuto();
+  buildPaperSel();
+  await loadAuto();
+  // one-time AI first-pass: auto-fill any empty page that has a server prediction
+  // (sample project only — predictions are Beach & Bay specific)
+  if(pr.id===SAMPLE.id){
+    pr.seeded=pr.seeded||{}; let seeded=false;
+    for(let i=0;i<NPAGES;i++){
+      if(S.boxes[i].length||pr.seeded[i]||!(S.pred[i]&&S.pred[i].length)) continue;
+      const fb=TYPES[0].id;
+      for(const b of S.pred[i]){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
+        const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role; S.boxes[i].push(nb); }
+      pr.seeded[i]=true; seeded=true;
+    }
+    if(seeded){ S.project.annotations=collectAnnotations(); try{localStorage.setItem(LS_PROJ,JSON.stringify(S.project));}catch(e){} }
+  }
   S.page=0; S.sel=[]; S.primary=null;
   updateToggleUI(); showPage(0);
 }
@@ -148,15 +162,15 @@ function buildPaperSel(){ const sel=$("#paperSel"); sel.innerHTML="";
     o.value=id; o.textContent=PAPERS[id].label; sel.appendChild(o); }
   sel.value=S.paperId; }
 
-async function loadAuto(){ // vision predictions + optional CV seeds served alongside the app
-  S.auto={};
+async function loadAuto(){ // CV seeds (auto_blocks) and vision predictions, kept SEPARATE
+  S.auto={}; S.pred={};
   try{ const j=await (await fetch("auto_blocks.json",{cache:"no-store"})).json();
     for(const pg of (j.pages||[])){ const idx=pg.page-1;
       S.auto[idx]=(pg.blocks||[]).map(b=>({cls:b.cls,x:b.box[0],y:b.box[1],
         w:b.box[2]-b.box[0],h:b.box[3]-b.box[1]})); } }catch(e){}
-  try{ const p=await (await fetch("predictions.json",{cache:"no-store"})).json(); // model first-pass overrides CV
+  try{ const p=await (await fetch("predictions.json",{cache:"no-store"})).json();
     const pred=p.predictions||{};
-    for(const k in pred) S.auto[+k]=pred[k].map(b=>({cls:b.cls,x:b.x,y:b.y,w:b.w,h:b.h,role:b.role}));
+    for(const k in pred) S.pred[+k]=pred[k].map(b=>({cls:b.cls,x:b.x,y:b.y,w:b.w,h:b.h,role:b.role}));
   }catch(e){} }
 
 /* ============================================================ palette */
@@ -671,7 +685,7 @@ function bindUI(){
   $("#clearPage").onclick=()=>{ if(!S.boxes[S.page].length)return;
     if(!confirm("Delete all "+S.boxes[S.page].length+" frames on this page?"))return;
     snapshot(); S.boxes[S.page]=[]; clearSel(); renderAll(); save(); };
-  $("#importAuto").onclick=()=>{ const a=S.auto[S.page]||[]; if(!a.length){ toast("No AI blocks for this page yet"); return; }
+  $("#importAuto").onclick=()=>{ const a=S.pred[S.page]||S.auto[S.page]||[]; if(!a.length){ toast("No AI blocks for this page yet"); return; }
     snapshot(); const fb=TYPES[0].id;
     for(const b of a){ let cls=AUTO_MAP[b.cls]||b.cls; if(!COLOR[cls])cls=fb;
       const nb={id:S.uid++,x:b.x,y:b.y,w:b.w,h:b.h,cls}; if(b.role&&rolesFor(cls))nb.role=b.role;
@@ -749,6 +763,6 @@ async function boot(){
   let pr=null;
   try{ const raw=localStorage.getItem(LS_PROJ); if(raw) pr=JSON.parse(raw); }catch(e){}
   if(!pr||!pr.pages||!pr.pages.length) pr=JSON.parse(JSON.stringify(SAMPLE));
-  loadProject(pr); if(!localStorage.getItem(LS_PROJ)) persist();
+  await loadProject(pr); if(!localStorage.getItem(LS_PROJ)) persist();
 }
 boot();
