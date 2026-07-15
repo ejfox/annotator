@@ -25,6 +25,8 @@ The rules it learned are in [`learning/lessons.md`](learning/lessons.md); the pa
 - **Draw / move / resize / delete** blocks, snapped to the NewsWell grid, page margins, pixel-detected content edges, and neighbouring frames. Hold `Shift` to bypass snapping.
 - **Real editor**: layers panel, numeric inspector (points), multi-select (shift-click, `Alt`-marquee, `⌘A`), align & distribute, copy/paste incl. paste-in-place across pages, undo/redo, zoom & pan.
 - **AI first pass**: pages with a prediction in `predictions.json` auto-fill on load; the ✨ button re-applies one on demand.
+- **Template matching**: ranks the page against the NewsWell template library and shows the best fit with a confidence score. Reads the live Studio library when it can, falls back to a bundled snapshot and says which it used. **Apply** stamps a template's slots onto the page.
+- **Page → template**: turns the current page into a valid `PageTemplate` (infers `cover`/`ad`/`ad-editorial`, carries `role` + photo hints) for import into Studio.
 - **Live reload**: publish a prediction and it appears in the open tab within a second; change the app code and the tab reloads itself.
 - Live **coverage %** and **overlap detection** per page.
 - **Exports NewsWell block JSON** — `kind` + geometry in points, content-relative, matching the studio's template format.
