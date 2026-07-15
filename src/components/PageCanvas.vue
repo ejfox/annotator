@@ -276,11 +276,11 @@ defineExpose({ zoomIn, zoomOut, zoomFit })
 
         <div v-for="b in curBoxes" :key="b.id" v-show="!b.hidden"
           class="box" :class="{ sel: isSel(b.id), locked: b.locked, hover: S.hover === b.id }"
-          :data-id="b.id"
+          :data-id="b.id" :data-cls="b.cls"
           :style="{
             left: b.x * scale + 'px', top: b.y * scale + 'px',
             width: b.w * scale + 'px', height: b.h * scale + 'px',
-            '--c': colorOf(b.cls), '--cf': colorOf(b.cls) + '2b'
+            '--c': colorOf(b.cls), '--cf': colorOf(b.cls) + '0e'
           }">
           <div class="tag">{{ labelOf(b.cls) }}<template v-if="b.role"> · {{ b.role.toUpperCase() }}</template></div>
           <div v-if="b.locked" class="lk">🔒</div>

@@ -1,10 +1,55 @@
 {
-  "source": "NewsWell block kinds — newswell-studio/app/types/pageTemplate.ts TemplateBlockKind = 'ad'|'editorial'|'filler'|'what-inside'|'wild-art' (also pageSchema-issue.ts .kind). Structure per EJ: top level is Editorial / Ad / Filler, and an Editorial block is an Article, Wild Art, or What's Inside. `kind` = the repo enum value each maps to. Edit freely; the app + renderer read this file.",
+  "source": "NewsWell block kinds \u2014 newswell-studio/app/types/pageTemplate.ts TemplateBlockKind = 'ad'|'editorial'|'filler'|'what-inside'|'wild-art' (also pageSchema-issue.ts .kind). Structure per EJ: top level is Editorial / Ad / Filler, and an Editorial block is an Article, Wild Art, or What's Inside. `kind` = the repo enum value each maps to. Edit freely; the app + renderer read this file.",
   "types": [
-    { "id": "article",     "label": "Article",      "group": "Editorial", "kind": "editorial",   "key": "a", "color": "#2563eb", "desc": "Standard editorial article — headline, body, art", "roles": ["secondary", "lead", "brief"] },
-    { "id": "wild-art",    "label": "Wild Art",     "group": "Editorial", "kind": "wild-art",    "key": "w", "color": "#10b981", "desc": "Standalone photo / art with caption, no article" },
-    { "id": "what-inside", "label": "What's Inside", "group": "Editorial", "kind": "what-inside", "key": "i", "color": "#8b5cf6", "desc": "Inside / teaser / index box" },
-    { "id": "ad",          "label": "Ad",           "group": "Ad",        "kind": "ad",          "key": "d", "color": "#e11d48", "desc": "Advertisement" },
-    { "id": "filler",      "label": "Filler",       "group": "Filler",    "kind": "filler",      "key": "f", "color": "#64748b", "desc": "Filler content" }
+    {
+      "id": "article",
+      "label": "Article",
+      "group": "Editorial",
+      "kind": "editorial",
+      "key": "a",
+      "color": "#1c1c1f",
+      "desc": "Standard editorial article \u2014 headline, body, art",
+      "roles": [
+        "secondary",
+        "lead",
+        "brief"
+      ]
+    },
+    {
+      "id": "wild-art",
+      "label": "Wild Art",
+      "group": "Editorial",
+      "kind": "wild-art",
+      "key": "w",
+      "color": "#2e2e34",
+      "desc": "Standalone photo / art with caption, no article"
+    },
+    {
+      "id": "what-inside",
+      "label": "What's Inside",
+      "group": "Editorial",
+      "kind": "what-inside",
+      "key": "i",
+      "color": "#3f3f46",
+      "desc": "Inside / teaser / index box"
+    },
+    {
+      "id": "ad",
+      "label": "Ad",
+      "group": "Ad",
+      "kind": "ad",
+      "key": "d",
+      "color": "#09090b",
+      "desc": "Advertisement"
+    },
+    {
+      "id": "filler",
+      "label": "Filler",
+      "group": "Filler",
+      "kind": "filler",
+      "key": "f",
+      "color": "#52525b",
+      "desc": "Filler content"
+    }
   ]
 }
