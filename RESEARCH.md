@@ -323,15 +323,21 @@ Stated plainly, because the result is only worth what survives them.
    Any statistic computed *from annotations* inherits the tool's snapping and the author's
    round numbers; §4 is what happens when you forget that. Statistics about the paper must
    come from the pixels.
-4. **Most annotation is unreviewed model output.** Of 123 blocks across two issues, a human
+4. **Even the gold reference had an error.** p1 of May 8 — hand-drawn by EJ, the seed all
+   four house rules came from — carried an advertisement labelled `article · secondary` until
+   2026-07-15. It was found because a Studio cover template scored a "bad" 0.53 against the
+   page and the disagreement turned out to be the template's point, not its failure. If the
+   one page a human drew by hand had a mislabelled block, the threat below is worse than its
+   raw numbers suggest.
+5. **Most annotation is unreviewed model output.** Of 123 blocks across two issues, a human
    drew or corrected roughly 25. The archetypes are visually unmistakable and the grid
    absorbs coordinate error, but the block-level data is mostly not ground truth.
-5. **The matcher was validated on the data that produced it.** 13/13 is a *consistency*
+6. **The matcher was validated on the data that produced it.** 13/13 is a *consistency*
    check (can it invert its own derivation?), not a generalisation result. Section 7 is the
    generalisation result, and it is weaker: 3 strong of 15.
-6. **No template has ever been rendered.** They pass NewsWell's real capacity and grid math
+7. **No template has ever been rendered.** They pass NewsWell's real capacity and grid math
    (8 tests), which is not the same as producing a usable page.
-7. **Author is the instrument.** The same model proposed the archetypes, annotated the
+8. **Author is the instrument.** The same model proposed the archetypes, annotated the
    pages, and wrote the matcher that scores them. Independent annotation would be worth more
    than any additional issue.
 

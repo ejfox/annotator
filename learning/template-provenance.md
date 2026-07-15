@@ -6,7 +6,7 @@ Every template in `newskick-templates-from-bbpress.json` traces to specific page
 **Annotation confidence:**
 | pages | how it was annotated |
 |---|---|
-| p1 | hand-drawn by EJ (the gold reference) |
+| p1 | hand-drawn by EJ (the gold reference — **with one correction, 2026-07-15: see below**) |
 | p2 | model first-pass, **hand-corrected by EJ** (merged 2 fillers → 1; enclosed full height) |
 | p3 | model prediction, **accepted verbatim, zero edits** |
 | p4 | model prediction, **hand-realigned by EJ** (row divider only; all classes accepted) |
@@ -116,3 +116,28 @@ Every block edge in the issue landed on the same lines (fraction of the 747×713
 ~~The **50% fold on both axes is the master line**~~ — **WITHDRAWN, see RESEARCH.md §4.** The figures below were computed from annotations drawn with snap-to-grid on, so they measured the tool, not the paper. Kept struck through rather than deleted because the templates below were authored while believing it. (37 vertical / 21 horizontal block edges
 land on it). Templates are authored to it: half = 367.5pt, right half starts 379.5pt,
 quarter columns = 177.75pt on the standard 4-col grid.
+
+
+## Correction — the gold reference had a mislabelled block (2026-07-15)
+
+p1's bottom-right block (`x=866 y=1356 w=762 h=243`) was tagged `article · secondary`.
+It is a **PB Foreign Car Repair advertisement** — coupons, dashed cut-out borders, expiry
+dates. Relabelled to `ad` in the seed file, in `store.js`'s bundled SAMPLE, and on disk.
+
+**How it surfaced.** EJ asked why Studio's `BBPRESS_EJSANITY_DEMO_COVER` was "such a bad
+match" for the cover at 0.53. It wasn't a bad match. The geometry paired at IoU 0.67–0.80
+on every block; the whole deficit came from two kind disagreements, and on the first one
+the *template was right and we were wrong*. Relabelling lifts the match 0.527 → 0.589.
+
+**Still open — a real taxonomy question, EJ's call.** The template also calls the centre
+photo package (`x=365 y=279`) `wild-art`, where the seed calls it `article · lead`. It is a
+photo collage with a caption and no body copy — the story text lives in the COVER STORY
+column beside it. Accepting that too takes the match to **0.682**. The same question applies
+to the Peninsula Beacon cover, annotated the same way.
+
+**Why this matters beyond one label.** p1 is the seed the entire flywheel grew from: all
+four house rules were distilled from it, and this file calls it the gold reference. It does
+not affect the 13/13 matcher guard (p1 is untemplated there) or the cover's abstention
+(it still scores 0.19 against the bundled library, which ships no cover template). But the
+reference was not clean, and a confidence score disagreeing with a human is not
+automatically the score being wrong.

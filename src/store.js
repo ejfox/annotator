@@ -44,7 +44,7 @@ const SAMPLE = {
       { x: 75, y: 268, w: 281, h: 796, cls: 'what-inside' },
       { x: 75, y: 1096, w: 267, h: 260, cls: 'ad' },
       { x: 75, y: 1356, w: 766, h: 243, cls: 'ad' },
-      { x: 866, y: 1356, w: 762, h: 243, cls: 'article', role: 'secondary' },
+      { x: 866, y: 1356, w: 762, h: 243, cls: 'ad' },
       { x: 365, y: 1023, w: 476, h: 333, cls: 'article', role: 'secondary' },
       { x: 866, y: 1012, w: 762, h: 344, cls: 'article', role: 'secondary' }
     ]
