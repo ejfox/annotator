@@ -8,4 +8,5 @@ annotations.local.json
 
 # Page scans stay out of git — they're copyrighted publication content and
 # heavy binaries. Regenerate locally: see samples/README.md
-samples/**/pages/
+public/samples/**/pages/
+dist/

@@ -48,8 +48,8 @@ Exported blocks are `{ id, kind, x, y, width, height }` in points relative to th
 
 Two tiers, so your work is never trapped in one browser profile:
 
-- **`serve.py` running** → edits autosave to `annotations.local.json` on disk, and the app loads from it. One source of truth across every tab and profile.
-- **Deployed static** → the endpoints 404 and it falls back to `localStorage`.
+- **Dev server running** → edits autosave to `annotations.local.json` on disk (via a small Vite plugin in `vite.config.js`), and the app loads from it. One source of truth across every tab and profile.
+- **Deployed static** → those routes don't exist, and it falls back to `localStorage`.
 
 ## Usage
 
@@ -61,28 +61,46 @@ A bundled sample project — *Beach & Bay Press, May 8 2026* — loads on first 
 
 ## Develop
 
-Pure static files, no build step:
+Vue 3 + Vite. One command:
 
 ```bash
-python3 serve.py            # → http://localhost:8000
+npm install
+npm run dev                 # → http://localhost:8000
 ```
 
-Edit `papers.json` (paper presets) and `types.json` (block taxonomy + colors) to add titles or adjust vocabulary — the app reads them at load. Edit `predictions.json` and open tabs hot-apply it.
+Edit `public/papers.json` (paper presets) and `public/types.json` (block taxonomy + colors) to add titles or adjust vocabulary — the app reads them at load. Edit `public/predictions.json` and open tabs hot-apply it (Vite's HMR covers modules; predictions are runtime data, so a small poll handles those).
+
+The dev server also provides `/api/load`, `/api/save` and `/api/version` via a plugin in `vite.config.js` — that's what puts your annotations in a file instead of one browser profile's localStorage. Production has none of it.
 
 ## Deploy
 
-Push to `main` → GitHub Pages via `.github/workflows/deploy.yml`. Point a CNAME record at Pages (the repo's `CNAME` sets the custom domain). The `/api/*` endpoints simply don't exist in production; the app degrades to `localStorage`.
+```bash
+npm run build               # → dist/  (~160KB, no scans)
+```
+
+Push to `main` → GitHub Pages via `.github/workflows/deploy.yml` (installs, builds, uploads `dist/`). Point a DNS CNAME at Pages; `public/CNAME` sets the custom domain.
 
 ## Layout
 
 ```
-index.html        app shell + styles
-app.js            editor (state, rendering, interaction, export, live-reload)
-serve.py          local dev server + optional disk persistence (/api/load, /api/save, /api/version)
-papers.json       NewsWell paper geometry presets
-types.json        block taxonomy (kind, color, key, roles)
-predictions.json  model first-pass blocks per page — auto-applied to empty pages
-samples/          sample issue manifest + seed annotation (page scans NOT committed)
+index.html        Vite entry
+vite.config.js    build + dev-only persistence API + page-scan strip guard
+src/
+  main.js         mount
+  App.vue         shell, keyboard, overlays, prediction hot-apply
+  store.js        reactive state + every action
+  style.css
+  lib/            pure, framework-free — the part that must stay correct
+    geometry.js     paper presets, px <-> content-point conversion, grid
+    edges.js        pixel-contrast content edges
+    newswell.js     block JSON in/out — the contract with newswell-studio
+    minimap.js      black-and-white page schematic
+  components/     LeftRail · PageCanvas · RightPanel · Minimap · StatusBar
+public/
+  papers.json     NewsWell paper geometry presets
+  types.json      block taxonomy (kind, color, key, roles)
+  predictions.json  model first-pass blocks per page — auto-applied to empty pages
+  samples/        sample issue manifest + seed annotation (page scans NOT committed)
 learning/         what the model learned, and where the templates came from
 newskick-templates-from-bbpress.json   the distilled page templates, NewsWell-native
 ```

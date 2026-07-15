@@ -10,6 +10,9 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;height:100%}
+/* Vue mounts here — the app shell's flex column lives on #app now, not <body>. */
+#app{display:flex;flex-direction:column;flex:1;min-height:0;width:100%}
+
 body{background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:13px;
   display:flex;flex-direction:column;overflow:hidden;user-select:none;-webkit-user-select:none;
   -webkit-font-smoothing:antialiased}
