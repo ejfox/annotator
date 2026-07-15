@@ -388,6 +388,18 @@ export async function loadPredictions() {
     }
   } catch {}
 }
+/**
+ * Fingerprint of a page's blocks. Recorded in `seeded[i]` when we fill a page, so
+ * we can later tell "still exactly as the model left it" from "a human touched
+ * this" — the only distinction that makes it safe to republish a correction.
+ */
+const sigOf = (blocks) =>
+  JSON.stringify(
+    (blocks || [])
+      .map((b) => [b.cls, Math.round(b.x), Math.round(b.y), Math.round(b.w), Math.round(b.h), b.role || ''])
+      .sort()
+  )
+
 /** Fill empty pages that have a prediction. Returns how many pages were filled. */
 export function seedPredictions({ once = true } = {}) {
   if (!S.project) return 0
@@ -404,7 +416,45 @@ export function seedPredictions({ once = true } = {}) {
       if (b.role && rolesFor(cls)) nb.role = b.role
       return nb
     })
-    seeded[i] = true
+    seeded[i] = sigOf(S.boxes[i])
+    n++
+  }
+  return n
+}
+
+/**
+ * Republish corrected predictions onto pages nobody has touched.
+ *
+ * seedPredictions() fills a page once and then never revisits it, so a *fixed*
+ * prediction could not reach a page that had already been seeded with a bad one —
+ * the app would sit on known-wrong geometry forever while predictions.json said
+ * otherwise, silently. That is how a whole issue of re-derived blocks failed to
+ * reach an open tab twice in a row.
+ *
+ * Safe because it only replaces a page whose blocks still fingerprint-match what
+ * we seeded. One nudge from a human and the page is theirs — we never touch it
+ * again. Pages seeded before signatures existed record `true`, which matches
+ * nothing, so they are also left alone.
+ */
+export function reseedUntouched() {
+  if (!S.project) return 0
+  const seeded = (S.project.seeded ||= {})
+  let n = 0
+  for (let i = 0; i < nPages.value; i++) {
+    const pr = S.pred[i]
+    if (!pr?.length) continue
+    const sig = seeded[i]
+    if (typeof sig !== 'string') continue          // hand-drawn, or pre-signature
+    if (sigOf(S.boxes[i]) !== sig) continue        // a human owns this page now
+    const next = pr.map((b) => {
+      const cls = typeMap.value[b.cls] ? b.cls : S.types[0].id
+      const nb = { id: S.uid++, x: b.x, y: b.y, w: b.w, h: b.h, cls }
+      if (b.role && rolesFor(cls)) nb.role = b.role
+      return nb
+    })
+    if (sigOf(next) === sig) continue              // prediction unchanged
+    S.boxes[i] = next
+    seeded[i] = sigOf(next)
     n++
   }
   return n
@@ -441,7 +491,7 @@ export async function seedAllProjects() {
       if (!blocks?.length) continue
       pr.annotations[i] = blocks.map((b) =>
         normBox({ ...b, cls: typeMap.value[b.cls] ? b.cls : S.types[0].id }))
-      seeded[i] = true
+      seeded[i] = sigOf(pr.annotations[i])
       filled++
     }
   }

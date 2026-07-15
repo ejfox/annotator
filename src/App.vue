@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {
   S, paper, nPages, conv, curBoxes, colorOf, labelOf,
-  boot, save, persist, loadProject, loadPredictions, seedPredictions, switchProject, addProject,
+  boot, save, persist, loadProject, loadPredictions, seedPredictions, reseedUntouched, switchProject, addProject,
   exportJson, importJson, undo, redo, duplicate, copySel, paste, deleteSel,
   setClass, setSel, clearSel, nudge, savePrefs, toast, SAMPLE
 } from './store.js'
@@ -40,7 +40,16 @@ async function poll() {
     if (ver !== null && v.pred !== ver) {
       await loadPredictions()
       const n = seedPredictions()
-      if (n) { persist(); toast(`✨ auto-filled ${n} page${n > 1 ? 's' : ''}`) }
+      // a corrected prediction must also reach pages we already seeded — but only
+      // those still untouched by a human. See reseedUntouched().
+      const r = reseedUntouched()
+      if (n || r) {
+        persist()
+        const bits = []
+        if (n) bits.push(`auto-filled ${n} page${n > 1 ? 's' : ''}`)
+        if (r) bits.push(`updated ${r} unedited page${r > 1 ? 's' : ''}`)
+        toast('✨ ' + bits.join(' · '))
+      }
     }
     ver = v.pred
   } catch { return } // static deploy — endpoint absent, stop
