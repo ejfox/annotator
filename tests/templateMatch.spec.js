@@ -33,8 +33,10 @@ const toPt = (b) => ({
   x: c.pxToPtX(b.x), y: c.pxToPtY(b.y), w: c.pxToPtW(b.w), h: c.pxToPtH(b.h)
 })
 
+const ISSUE = 'beach-and-bay-2026-05-08'
 const seed = R('public/samples/beach-and-bay-press-2026-05-08/annotations.seed.json')
-const preds = R('public/predictions.json').predictions
+// predictions are keyed by issue, then page index
+const preds = R('public/predictions.json').predictions[ISSUE]
 const library = R('public/newskick-templates-from-bbpress.json').templates
 
 /** page number (1-based) -> blocks in content points */

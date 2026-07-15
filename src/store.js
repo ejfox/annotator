@@ -54,7 +54,9 @@ const SAMPLE = {
 export const S = reactive({
   papers: FALLBACK_PAPERS,
   types: FALLBACK_TYPES,
-  project: null,
+  issues: [],       // bundled issue manifest (public/issues.json)
+  projects: {},     // id -> project; every issue you've touched
+  project: null,    // the active one (same object as projects[project.id])
   paperId: 'newswell-819x792',
   page: 0,
   boxes: {},
@@ -360,7 +362,8 @@ export function persist() {
   if (!S.project) return
   S.project.paperId = S.paperId
   S.project.annotations = collect()
-  const payload = JSON.stringify(S.project)
+  // v2: every issue you've touched, not just the active one
+  const payload = JSON.stringify({ v: 2, current: S.project.id, projects: S.projects })
   try { localStorage.setItem(LS_PROJ, payload); S.saveState = 'ok' }
   catch { S.saveState = 'err'; toast('Save failed — storage full? Export your JSON.') }
   fetch('/api/save', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: payload }).catch(() => {})
@@ -373,18 +376,21 @@ export function save() {
 }
 
 /* ---------------- predictions ---------------- */
+/** Predictions are per-issue: { predictions: { issueId: { pageIdx: [...] } } } */
 export async function loadPredictions() {
   S.pred = {}
+  if (!S.project) return
   try {
     const p = await (await fetch('predictions.json', { cache: 'no-store' })).json()
-    for (const k in p.predictions || {}) {
-      S.pred[+k] = p.predictions[k].map((b) => ({ cls: b.cls, x: b.x, y: b.y, w: b.w, h: b.h, role: b.role }))
+    const forIssue = p.predictions?.[S.project.id] || {}
+    for (const k in forIssue) {
+      S.pred[+k] = forIssue[k].map((b) => ({ cls: b.cls, x: b.x, y: b.y, w: b.w, h: b.h, role: b.role }))
     }
   } catch {}
 }
 /** Fill empty pages that have a prediction. Returns how many pages were filled. */
 export function seedPredictions({ once = true } = {}) {
-  if (!S.project || S.project.id !== SAMPLE.id) return 0
+  if (!S.project) return 0
   const seeded = (S.project.seeded ||= {})
   let n = 0
   for (let i = 0; i < nPages.value; i++) {
@@ -446,6 +452,45 @@ export function importJson(obj) {
   toast('Imported NewsWell JSON')
 }
 
+/** Build an empty project from a manifest entry. Pages are URL refs, not blobs. */
+function projectFromIssue(iss) {
+  const pad = (i) => 'p-' + String(i + 1).padStart(2, '0')
+  const p = {
+    id: iss.id, title: iss.title, source: iss.source, paperId: iss.paperId,
+    imageW: iss.imageW, imageH: iss.imageH,
+    pages: Array.from({ length: iss.pages }, (_, i) => ({ name: pad(i), src: iss.dir + pad(i) + '.png' })),
+    annotations: {}, seeded: {}
+  }
+  // The May 8 issue ships with EJ's hand annotation of page 1 — the seed the
+  // whole flywheel started from. Don't hand a fresh clone an empty cover.
+  if (iss.id === SAMPLE.id) p.annotations = JSON.parse(JSON.stringify(SAMPLE.annotations))
+  return p
+}
+
+/** Load a project's boxes + its predictions, and auto-seed anything empty. */
+async function activate(id) {
+  const pr = S.projects[id]
+  if (!pr) return
+  loadProject(pr)
+  await loadPredictions()
+  if (seedPredictions()) persist()
+}
+
+export async function switchProject(id) {
+  if (!S.projects[id] || id === S.project?.id) return
+  persist() // don't lose the issue we're leaving
+  await activate(id)
+  toast(S.projects[id].title)
+}
+
+/** Register a project built from uploaded images and switch to it. */
+export async function addProject(pr) {
+  if (S.project) persist()
+  S.projects[pr.id] = pr
+  await activate(pr.id)
+  persist()
+}
+
 export async function boot() {
   loadPrefs()
   try {
@@ -457,21 +502,33 @@ export async function boot() {
     if (t?.types?.length) S.types = t.types
   } catch {}
   S.active = S.types[0].id
-  await loadPredictions()
   loadTemplateLibrary() // non-blocking — matching lights up when it lands
+  try {
+    const j = await (await fetch('issues.json', { cache: 'no-store' })).json()
+    S.issues = j.issues || []
+  } catch {}
 
-  let pr = null
   // disk (dev server) is the source of truth when it's there — one state across
   // every tab and profile. Falls back to localStorage for the static deploy.
+  let stored = null
   try {
     const d = await (await fetch('/api/load', { cache: 'no-store' })).json()
-    if (d?.pages?.length) pr = d
+    if (d?.projects || d?.pages) stored = d
   } catch {}
-  if (!pr) { try { const raw = localStorage.getItem(LS_PROJ); if (raw) pr = JSON.parse(raw) } catch {} }
-  if (!pr?.pages?.length) pr = JSON.parse(JSON.stringify(SAMPLE))
+  if (!stored) { try { const raw = localStorage.getItem(LS_PROJ); if (raw) stored = JSON.parse(raw) } catch {} }
 
-  loadProject(pr)
-  seedPredictions()
+  // v1 stored a single bare project. Wrap it rather than drop it — that's
+  // somebody's annotation work.
+  if (stored?.pages && !stored.projects) {
+    stored = { v: 2, current: stored.id, projects: { [stored.id]: stored } }
+  }
+  S.projects = stored?.projects || {}
+  // merge the manifest: issues never opened get an empty project
+  for (const iss of S.issues) if (!S.projects[iss.id]) S.projects[iss.id] = projectFromIssue(iss)
+  if (!Object.keys(S.projects).length) S.projects[SAMPLE.id] = JSON.parse(JSON.stringify(SAMPLE))
+
+  const first = stored?.current && S.projects[stored.current] ? stored.current : Object.keys(S.projects)[0]
+  await activate(first)
   persist()
 }
 

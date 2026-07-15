@@ -2,7 +2,7 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {
   S, paper, nPages, conv, curBoxes, colorOf, labelOf,
-  boot, save, persist, loadProject, loadPredictions, seedPredictions,
+  boot, save, persist, loadProject, loadPredictions, seedPredictions, switchProject, addProject,
   exportJson, importJson, undo, redo, duplicate, copySel, paste, deleteSel,
   setClass, setSel, clearSel, nudge, savePrefs, toast, SAMPLE
 } from './store.js'
@@ -73,12 +73,14 @@ function onImgs(e) {
     rd.onload = () => {
       pages[start + k] = { name: f.name.replace(/\.[^.]+$/, ''), src: rd.result }
       if (++done !== list.length) return
-      const pr = append
-        ? { ...S.project, pages }
-        : { id: 'proj-' + Math.random().toString(36).slice(2, 8), title: 'Untitled project', source: '', paperId: S.paperId, pages, annotations: {} }
       const keep = append ? JSON.parse(JSON.stringify(S.project.annotations || {})) : {}
-      loadProject({ ...pr, annotations: keep })
-      persist()
+      const pr = append
+        ? { ...S.project, pages, annotations: keep }
+        : {
+            id: 'proj-' + Math.random().toString(36).slice(2, 8), title: 'Untitled project',
+            source: '', paperId: S.paperId, pages, annotations: {}, seeded: {}
+          }
+      addProject(pr)
       toast(`${append ? 'Added ' : 'New project · '}${list.length} page${list.length > 1 ? 's' : ''}`)
     }
     rd.readAsDataURL(f)
@@ -199,7 +201,9 @@ function changePaper(e) {
     </div>
     <div class="sep"></div>
     <div class="grp">
-      <input id="projTitle" v-model="S.project.title" v-if="S.project" title="Project name" spellcheck="false" @change="save">
+      <select id="issueSel" :value="S.project?.id" title="Switch issue" @change="switchProject($event.target.value)">
+        <option v-for="(p, id) in S.projects" :key="id" :value="id">{{ p.title }} · {{ p.pages.length }}pp</option>
+      </select>
       <select id="paperSel" :value="S.paperId" title="NewsWell paper preset (page size &amp; grid)" @change="changePaper">
         <option v-for="(p, id) in S.papers" :key="id" :value="id">{{ p.label }}</option>
       </select>

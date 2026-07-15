@@ -259,3 +259,6 @@ footer .warnpill{color:var(--warn)} footer .okpill{color:var(--ok)}
 .tsend input{width:100%;background:var(--panel2);border:1px solid var(--accent);border-radius:6px;
   padding:6px 8px;font-family:var(--mono);font-size:11px;color:var(--ink);margin-bottom:6px}
 .tsend input:focus{outline:none}
+
+/* issue switcher — the project title lives in the dropdown now */
+#issueSel{max-width:260px}

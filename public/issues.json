@@ -1,0 +1,35 @@
+{
+  "_note": "Bundled issues. Adding one = drop the page PNGs in public/samples/<id>/pages/ and add an entry here — no code change. Page scans are gitignored (copyrighted); regenerate with: pdftoppm -png -r 150 <issue>.pdf pages/p — see samples/README.md.",
+  "issues": [
+    {
+      "id": "beach-and-bay-2026-05-08",
+      "title": "Beach & Bay Press — May 8 2026",
+      "source": "beach-and-bay-press-may-8-2026.pdf",
+      "paperId": "newswell-819x792",
+      "dir": "samples/beach-and-bay-press-2026-05-08/pages/",
+      "pages": 16,
+      "imageW": 1707,
+      "imageH": 1650
+    },
+    {
+      "id": "beach-and-bay-2026-07-03",
+      "title": "Beach & Bay Press — July 3 2026",
+      "source": "beach-and-bay-press-july-3-2026.pdf",
+      "paperId": "newswell-819x792",
+      "dir": "samples/beach-and-bay-press-2026-07-03/pages/",
+      "pages": 16,
+      "imageW": 1707,
+      "imageH": 1650
+    },
+    {
+      "id": "peninsula-beacon-2026-07-10",
+      "title": "Peninsula Beacon — July 10 2026",
+      "source": "peninsula-beacon-july-10-2026.pdf",
+      "paperId": "newswell-819x792",
+      "dir": "samples/peninsula-beacon-2026-07-10/pages/",
+      "pages": 24,
+      "imageW": 1707,
+      "imageH": 1650
+    }
+  ]
+}
