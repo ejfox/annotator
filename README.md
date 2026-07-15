@@ -66,6 +66,7 @@ Vue 3 + Vite. One command:
 ```bash
 npm install
 npm run dev                 # → http://localhost:8000
+npm test                    # guards the matcher + the point math
 ```
 
 Edit `public/papers.json` (paper presets) and `public/types.json` (block taxonomy + colors) to add titles or adjust vocabulary — the app reads them at load. Edit `public/predictions.json` and open tabs hot-apply it (Vite's HMR covers modules; predictions are runtime data, so a small poll handles those).
@@ -97,7 +98,10 @@ src/
     edges.js        pixel-contrast content edges
     newswell.js     block JSON in/out — the contract with newswell-studio
     minimap.js      black-and-white page schematic
-  components/     LeftRail · PageCanvas · RightPanel · Minimap · StatusBar
+    templateMatch.js  which template describes this page (area-weighted IoU)
+    templates.js    template library source + page → PageTemplate
+  components/     LeftRail · PageCanvas · RightPanel · Minimap · StatusBar · TemplatePanel
+tests/            vitest — the pure lib/ modules, incl. the 13/13 matcher guard
 public/
   papers.json     NewsWell paper geometry presets
   types.json      block taxonomy (kind, color, key, roles)

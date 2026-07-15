@@ -11,7 +11,7 @@
  * builds a valid PageTemplate; how it travels (download + import, or a future
  * append endpoint) is the caller's choice. See the notes in README.
  */
-import { contentSize } from './geometry.js'
+import { contentSize, clamp } from './geometry.js'
 
 export const STUDIO_TEMPLATES_URL = 'https://newskickstudio.com/api/templates'
 const BUNDLED = 'newskick-templates-from-bbpress.json'
@@ -70,13 +70,19 @@ export function pageToTemplate(blocks, { paper, name, description = '', section 
     pageWidth: w,
     pageHeight: h,
     blocks: blocks.map((b) => {
+      // Annotations legitimately overflow the nominal content box — the house
+      // rule is "enclose the content fully", and real newsprint runs past its
+      // own margins. Templates can't: Studio's canvas models the content rect,
+      // so an out-of-bounds slot is invalid geometry. Clamp on the way out.
+      const x = clamp(b.x, 0, w)
+      const y = clamp(b.y, 0, h)
       const blk = {
         id: rid(),
         kind: b.kind,
-        x: r1(b.x),
-        y: r1(b.y),
-        width: r1(b.w),
-        height: r1(b.h)
+        x: r1(x),
+        y: r1(y),
+        width: r1(clamp(b.w, 0, w - x)),
+        height: r1(clamp(b.h, 0, h - y))
       }
       if (b.role && b.kind === 'editorial') {
         blk.role = b.role

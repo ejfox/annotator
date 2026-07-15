@@ -78,5 +78,7 @@ export default defineConfig({
   // relative base → works both on a Pages subpath and a custom domain
   base: './',
   server: { port: 8000 },
-  build: { outDir: 'dist', emptyOutDir: true }
+  build: { outDir: 'dist', emptyOutDir: true },
+  // The pure lib/ modules are the part that must stay correct across rewrites.
+  test: { environment: 'node', include: ['tests/**/*.spec.js'] }
 })
