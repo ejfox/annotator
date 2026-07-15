@@ -21,6 +21,7 @@ const saveText = computed(() => ({
       <span v-else class="okpill">✓ no overlaps</span>
     </div>
     <div class="spacer"></div>
-    <div class="st"><span :class="S.saveState">{{ saveText }}</span></div>
+    <!-- id is load-bearing: style.css colours the save state via #save.dirty/.ok/.err -->
+    <div class="st"><span id="save" :class="S.saveState">{{ saveText }}</span></div>
   </footer>
 </template>

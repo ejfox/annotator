@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue'
 import {
-  S, paper, nPages, conv, curBoxes, colorOf, labelOf, kindOf,
+  S, paper, nPages, conv, curBoxes, colorOf, labelOf,
   boot, save, persist, loadProject, loadPredictions, seedPredictions,
   exportJson, importJson, undo, redo, duplicate, copySel, paste, deleteSel,
   setClass, setSel, clearSel, nudge, savePrefs, toast, SAMPLE

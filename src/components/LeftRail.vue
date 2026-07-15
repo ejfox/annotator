@@ -52,12 +52,21 @@ function clearPage() {
             @click="cycleGrid">{{ S.gridMode }}-col</button>
         </div>
         <div class="row">
-          <button class="tgl grow" :class="{ on: S.snap }" title="Snap to grid, content edges &amp; frames — hold Shift to bypass (S)"
+          <button class="tgl grow" :class="{ on: S.snap }" title="Master snap toggle — hold Shift to bypass for one drag (S)"
             @click="S.snap = !S.snap; savePrefs()">⌁ Snap</button>
-          <button class="tgl" :class="{ on: S.edgesOn }" title="Snap to pixel-detected content edges"
-            @click="toggleEdges">Edges</button>
         </div>
-        <div class="hint">Hold <kbd>Shift</kbd> while dragging to bypass snapping. <kbd>Alt</kbd>-drag empty space to marquee-select.</div>
+        <div class="row">
+          <button class="tgl grow" :class="{ on: S.snap && S.snapFrames }" :disabled="!S.snap"
+            title="Snap to other blocks' edges. Turn off when frames keep sticking to each other."
+            @click="S.snapFrames = !S.snapFrames; savePrefs()">Frames</button>
+          <button class="tgl grow" :class="{ on: S.snap && S.edgesOn }" :disabled="!S.snap"
+            title="Snap to pixel-detected content edges" @click="toggleEdges">Edges</button>
+        </div>
+        <div class="hint">
+          Snap always takes grid + margins; <b>Frames</b> adds other blocks, <b>Edges</b> adds pixel-detected content.
+          Hold <kbd>Shift</kbd> to bypass for one drag. Zoom in for finer control — the magnet is 10px on
+          <em>screen</em>, so it covers less of the page the closer you get. <kbd>Alt</kbd>-drag to marquee-select.
+        </div>
       </div>
 
       <div class="section">

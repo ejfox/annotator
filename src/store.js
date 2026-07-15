@@ -71,6 +71,7 @@ export const S = reactive({
   imgMissing: false,
   active: 'article',
   snap: true,
+  snapFrames: true, // snap to other blocks' edges — the "snap-to-touch" magnet
   edgesOn: false,
   grid: false,
   gridMode: '4',
@@ -119,23 +120,22 @@ export const coverage = computed(() => {
 })
 
 /* ---------------- snapping ---------------- */
-export const staticSnaps = computed(() => {
+const staticSnaps = computed(() => {
   const p = paper.value
   const x = gridXPts(p, S.gridMode).map((pt) => ({ v: (pt * S.natW) / p.pageW, tag: pt === p.marginL || pt === p.pageW - p.marginR ? 'margin' : 'col' }))
   const y = marginYPts(p).map((pt) => ({ v: (pt * S.natH) / p.pageH, tag: 'margin' }))
   return { x, y }
 })
 
-export function edgeSnaps(img) {
+function edgeSnaps(img) {
   if (!S.edgesOn || !img) return { x: [], y: [] }
   const e = detectEdges(img, S.page + ':' + (S.project?.pages[S.page]?.src || ''))
   return { x: e.x.map((v) => ({ v, tag: 'edge' })), y: e.y.map((v) => ({ v, tag: 'edge' })) }
 }
 
 export function candidates(axis, excludeIds, img) {
-  const st = staticSnaps.value[axis].slice()
-  const ed = edgeSnaps(img)[axis]
-  const out = st.concat(ed)
+  const out = staticSnaps.value[axis].concat(edgeSnaps(img)[axis])
+  if (!S.snapFrames) return out // grid + margins only — no sticking to neighbours
   for (const b of curBoxes.value) {
     if (excludeIds.has(b.id) || b.hidden) continue
     if (axis === 'x') out.push({ v: b.x, tag: 'frame' }, { v: b.x + b.w, tag: 'frame' })
@@ -286,10 +286,10 @@ export function toast(msg) {
 }
 
 /* ---------------- persistence ---------------- */
-export function loadPrefs() {
+function loadPrefs() {
   try {
     const p = JSON.parse(localStorage.getItem(LS_PREFS) || '{}')
-    for (const k of ['snap', 'edgesOn', 'grid', 'mm']) if (p[k] != null) S[k] = p[k]
+    for (const k of ['snap', 'snapFrames', 'edgesOn', 'grid', 'mm']) if (p[k] != null) S[k] = p[k]
     if (p.gridMode) S.gridMode = p.gridMode
     if (p.defaultRole) S.defaultRole = p.defaultRole
   } catch {}
@@ -297,7 +297,8 @@ export function loadPrefs() {
 export function savePrefs() {
   try {
     localStorage.setItem(LS_PREFS, JSON.stringify({
-      snap: S.snap, edgesOn: S.edgesOn, grid: S.grid, gridMode: S.gridMode, mm: S.mm, defaultRole: S.defaultRole
+      snap: S.snap, snapFrames: S.snapFrames, edgesOn: S.edgesOn, grid: S.grid,
+      gridMode: S.gridMode, mm: S.mm, defaultRole: S.defaultRole
     }))
   } catch {}
 }
@@ -425,4 +426,4 @@ export async function boot() {
   persist()
 }
 
-export { SAMPLE, contentSize }
+export { SAMPLE }

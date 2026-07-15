@@ -1,9 +1,6 @@
 .DS_Store
-output/
 node_modules/
 *.log
-.venv/
-__pycache__/
 annotations.local.json
 
 # Page scans stay out of git — they're copyrighted publication content and
