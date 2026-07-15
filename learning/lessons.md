@@ -57,3 +57,25 @@ as filler. **Judgment calls flagged for EJ's review (highest learning value):**
 - p7 / p10 / p11: small bordered briefs (SeaWorld Drone Shows, Mt. Soledad) folded
   into the adjacent article — pull out as their own block?
 - p6: two stacked features labeled lead + secondary — both secondary?
+
+## Page 13 — CONFIRMED delta (EJ tuned it mid-session)
+
+Model split the puzzles page's right side three ways: a `filler` for the Sudoku,
+a separate `ad` for the "LIKE OUR PHOTOS / @sdnewsgroup" Instagram promo, and a
+`filler` for the crossword. **EJ merged the first two into one full-width
+`filler`** (866,95,766,418) and adjusted the crossword block.
+
+→ **Rule (extends "one block per region"): a house promo sitting inside a
+standing-matter region is part of that region, not a separate ad.** The Instagram
+promo is NewsWell's own, not sold inventory — on a games/legals page the whole
+right side is one filler region. Reserve `ad` for actual advertisers.
+
+This also confirms the rule generalises past editorial: "don't over-split"
+applies to filler regions too, which is where the model keeps wanting to be
+clever.
+
+**Process note:** predictions are the SEED, not the truth. Once EJ tunes a page
+they legitimately diverge — checking a page's block count against
+`predictions.json` and "fixing" a mismatch would destroy his edits. Disk
+(`annotations.local.json`) is the truth; predictions get updated to match him,
+never the reverse.
