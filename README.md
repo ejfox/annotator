@@ -20,6 +20,8 @@ On the Beach & Bay Press issue of May 8 2026, that ran: **page 1** hand-drawn �
 
 The rules it learned are in [`learning/lessons.md`](learning/lessons.md); the page-by-page record is in [`learning/template-provenance.md`](learning/template-provenance.md).
 
+**📄 [RESEARCH.md](RESEARCH.md) — the findings written up properly**: the quarter grid, six archetypes covering two issues, the matcher and its validation, and an explicit list of the reasons to doubt all of it.
+
 ## What it does
 
 - **Draw / move / resize / delete** blocks, snapped to the NewsWell grid, page margins, pixel-detected content edges, and neighbouring frames. Hold `Shift` to bypass snapping.
