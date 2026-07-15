@@ -1,3 +1,11 @@
+> **CORRECTION issued 2026-07-15 — this memo was sent, and finding #2 in it is wrong.**
+> It claims "every block edge lands on a quarter grid, with the 50% fold dominant on both axes."
+> That is withdrawn: the horizontal half measured our editor's snap-to-grid setting rather than the
+> newspaper, and the vertical half restated the definition of the 4-column paper preset (its gutter
+> centres are 0.246/0.500/0.754 — the "quarters" it was tested against). Finding #1 (six archetypes)
+> stands and has since been tested on two more issues. Details: RESEARCH.md §4. The memo text is left
+> unedited below, as sent.
+
 # Memo: page templates from a real issue, a matcher, and two API asks
 
 **To:** the NewsWell Studio team
@@ -9,7 +17,7 @@
 
 ## TL;DR
 
-1. We annotated a full issue by hand+model (Beach & Bay Press 5/8/26 — 16 pages, 61 blocks) and distilled **six page archetypes** that cover every page. They're in PR #142 as seven `PageTemplate`s with `origin: 'ai'`, plus 8 tests against your real capacity/grid math.
+1. We annotated a full issue by hand+model (Beach & Bay Press 5/8/26 — 16 pages, 60 blocks) and distilled **six page archetypes** that cover every page. They're in PR #142 as seven `PageTemplate`s with `origin: 'ai'`, plus 8 tests against your real capacity/grid math.
 2. Every block edge in that issue lands on a **quarter grid**, with the **50% fold dominant on both axes**. That's the paper's whole layout grammar.
 3. We built a **template matcher** (geometry, not words). It picks the right template on 13/13 pages of ground truth.
 4. **Two asks:** method-aware public `GET /api/templates`, and a new `POST /api/templates` that appends one template.

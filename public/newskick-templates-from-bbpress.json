@@ -2,7 +2,7 @@
   "version": 1,
   "updatedAt": 1784071930454,
   "updatedBy": "annotator-ai",
-  "_note": "Page templates distilled from Beach & Bay Press, May 8 2026 (16pp / 61 annotated blocks) by the NewsWell Annotator. Page 1 hand-annotated by EJ; pp.2-4 hand-tuned; pp.5-16 model-predicted. Every block edge in the source issue landed on the quarter grid (x: 0/.25/.5/.75/1, y: 0/.5/.75/1) with the 50% fold dominant on both axes. NewsWell PageTemplate schema; gridColumns omitted = inherit standard 4-col. origin='ai'. Full provenance: learning/template-provenance.md",
+  "_note": "Page templates distilled from Beach & Bay Press, May 8 2026 (16pp / 60 annotated blocks) by the NewsWell Annotator. Page 1 hand-annotated by EJ; pp.2-4 hand-tuned; pp.5-16 model-predicted. CORRECTION (2026-07-15): an earlier version of this note claimed every block edge landed on a quarter grid with the 50% fold dominant on both axes. That claim is WITHDRAWN \u2014 it was measured from annotations drawn with the editor's snap-to-grid enabled, and the vertical half merely restated the 4-col preset's own gutter positions. The templates themselves are unaffected (they were validated against the pages, not the grid) and match 13/13 source pages plus 75% of an unseen sister paper. NewsWell PageTemplate schema; gridColumns omitted = inherit standard 4-col. origin='ai'. Full provenance + the retraction: learning/template-provenance.md and RESEARCH.md \u00a74.",
   "_sourceIssue": "Beach & Bay Press \u2014 May 8, 2026 (beach-and-bay-press-may-8-2026.pdf)",
   "templates": [
     {

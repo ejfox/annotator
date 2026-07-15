@@ -16,11 +16,11 @@ hand-annotate one page  →  model predicts the next  →  you tune it
         └────────── it learns from your delta ──────────────┘
 ```
 
-On the Beach & Bay Press issue of May 8 2026, that ran: **page 1** hand-drawn → **page 2** predicted and hand-corrected (two fixes that became house rules) → **page 3** predicted and **accepted with zero edits** → **page 4** predicted, alignment-only fix → **pages 5–16** predicted in one pass. 16 pages, 61 blocks.
+On the Beach & Bay Press issue of May 8 2026, that ran: **page 1** hand-drawn → **page 2** predicted and hand-corrected (two fixes that became house rules) → **page 3** predicted and **accepted with zero edits** → **page 4** predicted, alignment-only fix → **pages 5–16** predicted in one pass. 16 pages, 60 blocks.
 
 The rules it learned are in [`learning/lessons.md`](learning/lessons.md); the page-by-page record is in [`learning/template-provenance.md`](learning/template-provenance.md).
 
-**📄 [RESEARCH.md](RESEARCH.md) — the findings written up properly**: the quarter grid, six archetypes covering two issues, the matcher and its validation, and an explicit list of the reasons to doubt all of it.
+**📄 [RESEARCH.md](RESEARCH.md) — the findings written up properly**: six archetypes tested across three issues and two papers, the matcher and its validation, six pre-registered predictions scored (3 held, 1 narrowly, 1 failed, 1 half-failed), and one headline finding **withdrawn** after it turned out to measure this editor's snap setting rather than the newspaper.
 
 ## What it does
 
@@ -117,7 +117,9 @@ public/newskick-templates-from-bbpress.json   the distilled page templates, News
 
 ## Templates
 
-Annotating a whole issue surfaced its grammar: every block edge lands on a **quarter grid**, with the **50% fold dominant on both axes**, and six archetypes cover all 16 pages — the two split forms, lead-over-ad-row, the news and classifieds ad grids, stacked features, and the masthead rail.
+Annotating a whole issue surfaced six archetypes that cover all 16 pages — the two split forms, lead-over-ad-row, the news and classifieds ad grids, stacked features, and the masthead rail. They transfer: they cover a second issue of the same paper, and 75% of a *different* paper's pages.
+
+> This section used to claim a **quarter grid** with the *50% fold dominant on both axes*. **That was withdrawn** — the horizontal half measured the editor's own snap-to-grid setting, and the vertical half restated the definition of a 4-column preset. See [RESEARCH.md §4](RESEARCH.md). The archetypes below survived the same scrutiny; the grid did not.
 
 Those are distilled into `public/newskick-templates-from-bbpress.json` in NewsWell's `PageTemplate` schema (importable into Studio's template library), and shipped upstream in [ejfox/newswell#142](https://github.com/ejfox/newswell/pull/142). Each names the exact pages it came from.
 

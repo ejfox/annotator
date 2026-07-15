@@ -113,6 +113,6 @@ Every block edge in the issue landed on the same lines (fraction of the 747×713
 - **vertical:** 0 · 0.25 · **0.50** · 0.75 · 1.0
 - **horizontal:** 0 · **0.50** · 0.75 · 1.0
 
-The **50% fold on both axes is the master line** (37 vertical / 21 horizontal block edges
+~~The **50% fold on both axes is the master line**~~ — **WITHDRAWN, see RESEARCH.md §4.** The figures below were computed from annotations drawn with snap-to-grid on, so they measured the tool, not the paper. Kept struck through rather than deleted because the templates below were authored while believing it. (37 vertical / 21 horizontal block edges
 land on it). Templates are authored to it: half = 367.5pt, right half starts 379.5pt,
 quarter columns = 177.75pt on the standard 4-col grid.
