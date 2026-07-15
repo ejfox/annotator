@@ -105,7 +105,7 @@ const ALIGN = [
           @click="pick(b, $event)"
           @mouseenter="S.hover = b.id" @mouseleave="S.hover === b.id && (S.hover = null)">
           <button class="lbtn eye" :class="{ on: b.hidden }" title="Show/hide" @click.stop="toggleHidden(b)">{{ b.hidden ? '◌' : '◉' }}</button>
-          <i :data-cls="b.cls"></i>
+          <i :style="{ background: colorOf(b.cls) }"></i>
           <span class="nm"><b>{{ labelOf(b.cls) }}</b>{{ b.role ? ' ' + b.role : '' }}<small>{{ dims(b) }}</small></span>
           <button class="lbtn lock" :class="{ on: b.locked }" title="Lock" @click.stop="toggleLock(b)">{{ b.locked ? '🔒' : '🔓' }}</button>
           <button class="lbtn del" title="Delete" @click.stop="del(b)">✕</button>

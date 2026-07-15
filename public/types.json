@@ -7,7 +7,7 @@
       "group": "Editorial",
       "kind": "editorial",
       "key": "a",
-      "color": "#1c1c1f",
+      "color": "#2563eb",
       "desc": "Standard editorial article \u2014 headline, body, art",
       "roles": [
         "secondary",
@@ -21,7 +21,7 @@
       "group": "Editorial",
       "kind": "wild-art",
       "key": "w",
-      "color": "#2e2e34",
+      "color": "#10b981",
       "desc": "Standalone photo / art with caption, no article"
     },
     {
@@ -30,7 +30,7 @@
       "group": "Editorial",
       "kind": "what-inside",
       "key": "i",
-      "color": "#3f3f46",
+      "color": "#8b5cf6",
       "desc": "Inside / teaser / index box"
     },
     {
@@ -39,7 +39,7 @@
       "group": "Ad",
       "kind": "ad",
       "key": "d",
-      "color": "#09090b",
+      "color": "#e11d48",
       "desc": "Advertisement"
     },
     {
@@ -48,7 +48,7 @@
       "group": "Filler",
       "kind": "filler",
       "key": "f",
-      "color": "#52525b",
+      "color": "#64748b",
       "desc": "Filler content"
     }
   ]

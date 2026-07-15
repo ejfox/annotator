@@ -4,11 +4,12 @@
  *
  * Two rules hold the design together:
  *
- * 1. BLOCK KIND READS BY MARK, NOT HUE. Solid = ad, rules = editorial, hatch =
- *    filler, cross = wild art, dashed = what's-inside. This is the minimap's
- *    language (lib/minimap.js) extended to the canvas, and it's the academic
- *    convention for the same reason it was the minimap's: journal plates hatch
- *    because they print black-and-white. One idea, two places.
+ * 1. COLOUR MEANS BLOCK KIND, AND MEANS NOTHING ELSE. The canvas overlay is the
+ *    only coloured surface in the app: it sits over photographs and newsprint,
+ *    where hue is read instantly and a border style is not. Chrome, states, the
+ *    save indicator and confidence bars are all achromatic — they earn emphasis
+ *    with weight and inversion instead. The minimap keeps its black-and-white
+ *    marks because at 46px a colour swatch is just a smudge (see lib/minimap.js).
  *
  * 2. ANYTHING DRAWN OVER THE PAGE MUST SURVIVE BOTH GROUNDS. The canvas is white
  *    newsprint most of the time and a full-bleed black ad the rest of it, so a
@@ -97,7 +98,7 @@ aside{background:var(--panel);display:flex;flex-direction:column;min-height:0}
 .sw{display:flex;align-items:center;gap:9px;padding:8px 9px;border-radius:var(--r);border:1px solid var(--line);
   background:var(--panel2);cursor:pointer;font-size:12.5px}
 .sw:hover{border-color:var(--line2)}
-.sw i{width:13px;height:13px;border-radius:0;flex:0 0 auto;background:#fff;box-shadow:inset 0 0 0 1px #000}
+.sw i{width:13px;height:13px;border-radius:0;flex:0 0 auto;box-shadow:inset 0 0 0 1px #0009}
 .sw .lab{flex:1}
 .sw kbd{opacity:.85}
 .sw.active{border-color:var(--accent);box-shadow:inset 0 0 0 1px var(--accent)}
@@ -159,31 +160,10 @@ aside{background:var(--panel);display:flex;flex-direction:column;min-height:0}
 .box.sel::after{content:"";position:absolute;inset:-4px;border:1.5px solid #000;
   box-shadow:0 0 0 1.5px #fff;border-radius:0;pointer-events:none}
 
-/* The marks themselves — same vocabulary as the minimap legend.
-   Kind reads on the BORDER first (rule weight + style), because a border costs no
-   legibility, and only then in the fill texture. A fill heavy enough to identify a
-   block at a glance is also heavy enough to grey out the newsprint underneath it,
-   which is the one thing this tool exists to show you. */
-.box[data-cls="ad"]{border-width:2.5px}
-.box[data-cls="wild-art"]{border-width:3px;border-style:double}
-.box[data-cls="filler"]{border-style:dotted;border-width:2px}
-.box[data-cls="article"]{background-image:repeating-linear-gradient(180deg,transparent 0 4px,rgba(0,0,0,.055) 4px 5px)}
-.box[data-cls="wild-art"]{background-image:
-  repeating-linear-gradient(45deg,transparent 0 7px,rgba(0,0,0,.05) 7px 8px),
-  repeating-linear-gradient(-45deg,transparent 0 7px,rgba(0,0,0,.05) 7px 8px)}
-.box[data-cls="what-inside"]{border-style:dashed}
-.box[data-cls="filler"]{background-image:repeating-linear-gradient(45deg,transparent 0 4px,rgba(0,0,0,.07) 4px 6px)}
-/* Legend swatches carry the same marks, so the rail teaches the canvas. Each is a
-   tiny white page — the rail is dark and the canvas is newsprint, so a single fill
-   value could not read on both grounds (rule 2). */
-.sw i[data-cls="ad"],.layer i[data-cls="ad"]{background:#000}
-.sw i[data-cls="article"],.layer i[data-cls="article"]{background-image:repeating-linear-gradient(180deg,transparent 0 2px,#000 2px 3px)}
-.sw i[data-cls="wild-art"],.layer i[data-cls="wild-art"]{background-image:
-  repeating-linear-gradient(45deg,transparent 0 3px,#000 3px 4px),
-  repeating-linear-gradient(-45deg,transparent 0 3px,#000 3px 4px)}
-.sw i[data-cls="what-inside"],.layer i[data-cls="what-inside"]{box-shadow:inset 0 0 0 1px #000,inset 0 3px 0 -1px #000}
-.sw i[data-cls="filler"],.layer i[data-cls="filler"]{background-image:repeating-linear-gradient(45deg,transparent 0 2px,#000 2px 4px)}
-
+/* Kind is carried by HUE here and nowhere else in the app — see the header note.
+   The canvas is the one surface where colour is doing work: it sits over photographs
+   and newsprint, where a border style alone is slow to read. Everything around it
+   stays achromatic so the page and its blocks are the only things with colour. */
 .hnd{position:absolute;width:10px;height:10px;background:#fff;border:1.5px solid #000;
   border-radius:0;box-sizing:border-box;z-index:5;box-shadow:0 0 0 1px #fff}
 .hnd.nw{left:-6px;top:-6px;cursor:nwse-resize} .hnd.ne{right:-6px;top:-6px;cursor:nesw-resize}
@@ -252,7 +232,7 @@ aside{background:var(--panel);display:flex;flex-direction:column;min-height:0}
 .layer:hover{background:var(--panel2)}
 .layer.sel{background:var(--accentdim);border-color:var(--accent)}
 .layer.hidden{opacity:.45}
-.layer i{width:11px;height:11px;border-radius:0;flex:0 0 auto;background:#fff;box-shadow:inset 0 0 0 1px #000}
+.layer i{width:11px;height:11px;border-radius:0;flex:0 0 auto;box-shadow:inset 0 0 0 1px #0009}
 .layer .nm{flex:1;font-size:12px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .layer .nm b{font-weight:600}
 .layer .nm small{color:var(--faint);font-family:var(--mono);font-size:10px;margin-left:5px}

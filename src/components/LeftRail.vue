@@ -37,7 +37,7 @@ function clearPage() {
           <div v-if="groups.length > 1" class="grpLabel">{{ g.name }}</div>
           <div v-for="t in g.types" :key="t.id" class="sw" :class="{ active: S.active === t.id }"
             :title="t.desc || t.label" @click="setClass(t.id)">
-            <i :data-cls="t.id"></i>
+            <i :style="{ background: t.color }"></i>
             <span class="lab">{{ t.label }}</span>
             <kbd v-if="t.key">{{ t.key.toUpperCase() }}</kbd>
           </div>
