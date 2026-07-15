@@ -70,59 +70,54 @@ Source PDFs pulled from Times of San Diego's Heyzine flip-books; rendered at 150
 the claim that these SDCNG titles share one paper preset. The Beacon being **16 pages, like
 Beach & Bay** is itself a small result: the format is shared, not just the preset.
 
-## 4. Result 1 — the grid is real on one axis, and was an artifact on the other
+## 4. Result 1 — WITHDRAWN. There was never a grid finding.
 
-> **This section was substantially wrong until 2026-07-15 and is rewritten.** It claimed
-> both axes; only one survives. The retraction is kept in place rather than quietly edited,
-> because *how* it was wrong is the most transferable thing in this document.
+> Twice retracted, now withdrawn entirely. Kept in place because the way it failed is
+> the most useful thing in this document.
 
-### What went wrong
+**The claim was:** every block edge lands on a quarter grid — 0 · 0.25 · 0.50 · 0.75 · 1.0 —
+with the 50% fold the master line on both axes. "Nothing is freeform."
 
-Every grid number here was originally computed from **annotations** — blocks drawn by a
-human or a model, in an editor with **snap-to-grid on by default**, by an author who types
-round numbers (`x=75`, `y=825`, `w=1557`). Then the annotations were measured and found to
-be… on the grid.
+**It died in three stages.**
 
-That is circular, and it is the same circularity flagged as threat #2 for the July 3 pages.
-It went unnoticed for longer on this axis because the output looked like a *measurement*
-rather than a recollection. It was neither: it was the tool's snap setting, read back.
+**1. The horizontal half was the tool.** Every figure was computed from *annotations* —
+blocks drawn in an editor with snap-to-grid on, by an author typing round numbers
+(`x=75`, `y=825`). We measured our own snapping and reported it as a property of the paper.
+Ink says block heights land on quarters at 2–3× chance, which is not a grid. Annotations
+said 79–91%. The gap was us.
 
-It surfaced only when EJ looked at a rendered page and said the blocks weren't lined up.
-The inspector showed `AD 367×359 at X=0 Y=353` — round, grid-perfect, and nowhere near the
-ink.
+**2. The vertical half is a tautology.** Falling back on "but the ink-derived vertical
+number survives at 11–13× chance" lasted one more check. The paper preset is **4 columns ×
+177.75pt + 12pt gutters**. Its gutter centres sit at **0.246 / 0.500 / 0.754**. The quarter
+lines I tested against are 0.25 / 0.5 / 0.75 — **off by 3pt, inside a ±7.5pt tolerance.**
 
-### The honest test
+> "Ink edge within ±0.01 of a quarter" and "ink edge inside a column gutter" are the same
+> test. A gutter is a gap in the ink by construction; an ink-edge detector finds gaps in ink.
 
-Ask the **pixels**, with no annotation in the loop. `detectEdges()` (ported from
-[`src/lib/edges.js`](src/lib/edges.js)) finds ink boundaries directly. Interior edges only —
-the page's outer bounds are trivially on the grid and would flatter any result:
+The test could not have failed. Any 4-column document scores the same — the finding is
+"this 4-column paper is set in 4 columns."
 
-| corpus | vertical (columns) | horizontal (stacking) |
-|---|---|---|
-| BBP May 8 | **65.6%** on grid · 21/64 on the 50% fold | 17.9% · 10/78 |
-| Peninsula Beacon | **80.4%** on grid · 28/56 on the 50% fold | 14.1% · 15/170 |
-| *chance baseline* | *6%* | *6%* |
+**3. What's left folds into §5.** The one non-definitional signal is that the 0.50 line is
+~3× overrepresented versus 0.25/0.75 (28 of 56 interior Beacon edges). But a page split
+down the middle *is* a wide gap at 0.50 — so that observation is not independent evidence of
+a grid. It is the split-page archetype of §5, seen through an edge detector. §4 was never a
+separate result.
 
-*(tolerance ±0.01 of the content dimension; 3 interior lines at .25/.50/.75)*
+### What this cost, and what it's worth
 
-**Vertical survives, decisively** — 11–13× chance, on two papers, measured from ink. And the
-50% fold really is the master line: half the Beacon's interior column edges sit exactly on
-it. No snapping can produce that; the detector never saw a block.
+The grid was load-bearing rhetoric: it was the reason to believe "per-page pixel error
+doesn't propagate," and it made the archetypes look like consequences of a deeper geometric
+law rather than what §9 shows they are — one paper's house style. Removing it doesn't
+weaken §5–§9; those stand on their own evidence. It removes a *second* finding that was
+never there.
 
-**Horizontal does not.** 2–3× chance is a faint signal, not a grid. The annotation-derived
-figure said 79–91%; the ink says 14–24%. **That gap is the snapping.**
-
-### Why the split is believable
-
-It has a mechanism, which is the main reason to trust it over the tidier original claim.
-**Columns are rigid** — they are the paper preset, and everything on the page is set into
-them, so vertical edges have nowhere else to land. **Vertical position is fluid** — where a
-story ends depends on how long the copy ran. A newspaper is a column grid with things
-stacked into it at whatever height they happen to be, not a quarter-grid in both axes.
-
-So templates may be authored to the **column** grid with confidence. Authoring block
-*heights* to quarters is imposing a regularity the paper does not have — and every
-annotation in this repo did exactly that, by ~22px on average (median 22, max 48).
+**The transferable lesson.** All three stages share one failure: **a test that cannot fail
+is not evidence.** Stage 1 measured the instrument. Stage 2 measured a definition. Neither
+was checkable by running it again more carefully — only by asking *what would this look like
+if it were false?* For stage 2 the answer was "identical," and that could have been worked
+out from `papers.json` on day one, before any pixels were counted. Every quantitative claim
+here should have carried that question. This is threat #7 (author is the instrument) with a
+number attached — and it was a human glancing at a rendered page, twice, that caught it.
 
 ## 5. Result 2 — six shapes cover an issue (n=1)
 
@@ -278,28 +273,27 @@ matches everything is measuring nothing.
 Put the four corpora side by side, and the two things this project has been calling one
 finding come apart:
 
-| corpus | editorial distance | match ≥0.5 | column grid *(ink-derived)* |
-|---|---|---|---|
-| BBP May 8 | *in-sample* | 13/13 | 66% |
-| BBP July 3 | same paper, +2 months | 15/15 | — |
-| Peninsula Beacon | different paper, same shop | **75%** | 80% |
-| San Diego Reader | different publication, same shop | **38%** | — |
+| corpus | editorial distance | match ≥0.5 |
+|---|---|---|
+| BBP May 8 | *in-sample* | 13/13 |
+| BBP July 3 | same paper, +2 months | 15/15 |
+| Peninsula Beacon | different paper, same shop | **75%** |
+| San Diego Reader | different publication, same shop | **38%** |
 
-**Archetype match collapses monotonically — 100 → 100 → 75 → 38. Column-grid adherence does
-not.** The grid column figures are the ink-derived ones from §4 (11–13× chance); the
-annotation-derived numbers this table used to carry were contaminated by snapping and are
-withdrawn. Per-issue ink figures for July 3 and the Reader are not yet computed — the two
-that are, on two different papers, already show the dissociation.
+**Archetype match collapses monotonically — 100 → 100 → 75 → 38.**
+
+This table used to carry a grid column, and the dissociation was billed as "the grid
+generalises, the archetypes don't." Half of that was never a finding (§4). What remains is
+the gradient above, which needs no grid to be interesting: **the archetypes are one paper's
+house style and degrade with editorial distance.** That is the result.
 
 That is a dissociation, and it is the most useful thing here. The grid and the archetypes
 co-varied perfectly in the n=1 data, so §4 and §5 read as two faces of one discovery. They
 are not:
 
-- **The column grid is a property of the paper preset** — of production. Everything coming
-  out of this shop is set into the same columns with the 50% fold dominant, regardless of who
-  is editing it. Block *heights* are not gridded (§4) — that half was an artifact.
 - **The archetypes are a property of the house style** — of editorial. They degrade exactly
-  as fast as editorial distance grows.
+  as fast as editorial distance grows. (The other half of this contrast, the grid, turned out
+  not to exist — see §4.)
 
 The mechanism is visible page by page. The Reader is magazine-style — full-bleed photo
 cover, no INSIDE rail, no ad grid, wild art dominant. The library mostly fails on it, as it
@@ -386,13 +380,10 @@ archetypes are Beach & Bay's alone and the Beacon's 75% was luck.
 The original question — *does a newspaper have a grammar?* — has a sharper answer than
 expected, because the thing being measured turned out to be two things.
 
-- **Strong — the COLUMN grid is universal to the shop.** 66% / 80% of interior *ink* edges
-  land on quarters against a 6% chance baseline, on two papers, with the 50% fold carrying
-  a third to a half of them. Measured from pixels, no annotation in the loop. This is a
-  production property and belongs in the paper preset.
-- **Retracted — the horizontal grid.** Block heights land on quarters at 2–3× chance, which
-  is not a grid. The original 79–91% figure measured the editor's snap setting and the
-  author's round numbers, not the newspaper (§4).
+- **Withdrawn — the grid, entirely (§4).** The horizontal half measured the editor's snap
+  setting; the vertical half restated the definition of a 4-column preset. There is one
+  paper preset, it has 4 columns, and pages are set in them. That is a fact from
+  `papers.json`, not a finding from 3 issues.
 - **Strong — the archetypes are a house style, not a law of newsprint.** They score 100% on
   Beach & Bay, 75% on a sister paper, 38% on a magazine from the same shop. That gradient is
   the finding. Anyone shipping these must scope them per-title.
