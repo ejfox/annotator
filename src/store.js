@@ -12,6 +12,8 @@ import {
 } from './lib/geometry.js'
 import { detectEdges, clearEdgeCache } from './lib/edges.js'
 import { toNewsWell, fromNewsWell } from './lib/newswell.js'
+import { rankTemplates } from './lib/templateMatch.js'
+import { loadTemplates as fetchTemplates, pageToTemplate } from './lib/templates.js'
 
 const LS_PROJ = 'nwannot.project.v1'
 const LS_PREFS = 'nwannot.prefs.v1'
@@ -57,6 +59,9 @@ export const S = reactive({
   page: 0,
   boxes: {},
   pred: {},
+  templates: [],
+  templateSource: '', // 'studio' | 'bundled' | 'none'
+  templateNote: '',
   undo: {},
   redo: {},
   uid: 1,
@@ -118,6 +123,49 @@ export const coverage = computed(() => {
   }
   return { pct: Math.min(999, Math.round((covered / area) * 100)), overlaps, count: bs.length }
 })
+
+/* ---------------- templates ---------------- */
+/** Current page's blocks in NewsWell content points — the shape templates speak. */
+export const pageBlocksPt = computed(() => {
+  const c = conv.value
+  return curBoxes.value.filter((b) => !b.hidden).map((b) => ({
+    kind: kindOf(b.cls),
+    role: b.role,
+    x: c.pxToPtX(b.x), y: c.pxToPtY(b.y), w: c.pxToPtW(b.w), h: c.pxToPtH(b.h)
+  }))
+})
+export const pageMatches = computed(() =>
+  rankTemplates(pageBlocksPt.value, S.templates, contentSize(paper.value))
+)
+
+export async function loadTemplateLibrary() {
+  const { templates, source, error } = await fetchTemplates()
+  S.templates = templates
+  S.templateSource = source
+  S.templateNote = error || ''
+}
+
+/** Stamp a template's slots onto the current page, replacing what's there. */
+export function applyTemplate(t) {
+  const c = conv.value
+  snapshot()
+  S.boxes[S.page] = (t.blocks || []).map((b) => {
+    const type = S.types.find((x) => x.kind === b.kind) || S.types[0]
+    const nb = {
+      id: S.uid++, cls: type.id,
+      x: c.ptToPxX(b.x), y: c.ptToPxY(b.y), w: c.ptToPxW(b.width), h: c.ptToPxH(b.height)
+    }
+    if (b.role && rolesFor(type.id)) nb.role = b.role
+    return nb
+  })
+  clearSel(); save()
+  toast(`Applied ${t.name}`)
+}
+
+/** Build a NewsWell PageTemplate from the current page. */
+export function currentPageAsTemplate(name, description) {
+  return pageToTemplate(pageBlocksPt.value, { paper: paper.value, name, description })
+}
 
 /* ---------------- snapping ---------------- */
 const staticSnaps = computed(() => {
@@ -410,6 +458,7 @@ export async function boot() {
   } catch {}
   S.active = S.types[0].id
   await loadPredictions()
+  loadTemplateLibrary() // non-blocking — matching lights up when it lands
 
   let pr = null
   // disk (dev server) is the source of truth when it's there — one state across

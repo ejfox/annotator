@@ -104,14 +104,14 @@ public/
   predictions.json  model first-pass blocks per page — auto-applied to empty pages
   samples/        sample issue manifest + seed annotation (page scans NOT committed)
 learning/         what the model learned, and where the templates came from
-newskick-templates-from-bbpress.json   the distilled page templates, NewsWell-native
+public/newskick-templates-from-bbpress.json   the distilled page templates, NewsWell-native
 ```
 
 ## Templates
 
 Annotating a whole issue surfaced its grammar: every block edge lands on a **quarter grid**, with the **50% fold dominant on both axes**, and six archetypes cover all 16 pages — the two split forms, lead-over-ad-row, the news and classifieds ad grids, stacked features, and the masthead rail.
 
-Those are distilled into `newskick-templates-from-bbpress.json` in NewsWell's `PageTemplate` schema (importable into Studio's template library), and shipped upstream in [ejfox/newswell#142](https://github.com/ejfox/newswell/pull/142). Each names the exact pages it came from.
+Those are distilled into `public/newskick-templates-from-bbpress.json` in NewsWell's `PageTemplate` schema (importable into Studio's template library), and shipped upstream in [ejfox/newswell#142](https://github.com/ejfox/newswell/pull/142). Each names the exact pages it came from.
 
 ## License
 

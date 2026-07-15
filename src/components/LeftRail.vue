@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { S, paper, setClass, savePrefs, snapshot, clearSel, save, applyPrediction, coverage, curBoxes } from '../store.js'
 import { clearEdgeCache } from '../lib/edges.js'
+import TemplatePanel from './TemplatePanel.vue'
 
 const groups = computed(() => {
   const order = [], m = {}
@@ -78,6 +79,8 @@ function clearPage() {
         </div>
         <div class="hint">{{ coverage.count }} frame{{ coverage.count === 1 ? '' : 's' }} · {{ coverage.pct }}% of content covered</div>
       </div>
+
+      <TemplatePanel />
     </div>
   </aside>
 </template>
