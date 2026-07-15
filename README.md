@@ -53,7 +53,7 @@ Two tiers, so your work is never trapped in one browser profile:
 
 ## Usage
 
-A bundled sample — *Beach & Bay Press, May 8 2026* — loads on first run.
+A bundled sample project — *Beach & Bay Press, May 8 2026* — loads on first run. Its **page scans aren't committed** (copyrighted publication content, and heavy binaries don't belong in git), so you'll see blank pages at the correct dimensions until you supply them — see [`samples/README.md`](samples/README.md). Everything else works regardless: grid, snapping, blocks, predictions, export.
 
 - **Draw** — drag empty page space. **Select** — click a frame. Move/resize via body or handles.
 - **New project** — *New…* / *Add pages…* to load your own page images (PNG/JPG, named in page order).
@@ -82,7 +82,7 @@ serve.py          local dev server + optional disk persistence (/api/load, /api/
 papers.json       NewsWell paper geometry presets
 types.json        block taxonomy (kind, color, key, roles)
 predictions.json  model first-pass blocks per page — auto-applied to empty pages
-samples/          bundled example issue (page images + seed annotations)
+samples/          sample issue manifest + seed annotation (page scans NOT committed)
 learning/         what the model learned, and where the templates came from
 newskick-templates-from-bbpress.json   the distilled page templates, NewsWell-native
 ```

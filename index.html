@@ -95,6 +95,12 @@ aside{background:var(--panel);display:flex;flex-direction:column;min-height:0}
   background:#0d0906;cursor:crosshair;touch-action:none;flex:0 0 auto}
 #canvas.pan{cursor:grab} #canvas.panning{cursor:grabbing}
 #page{display:block;height:auto;pointer-events:none;user-select:none}
+#noimg{position:absolute;inset:0;display:none;flex-direction:column;align-items:center;justify-content:center;
+  gap:10px;text-align:center;padding:40px;color:var(--faint);font-size:12.5px;line-height:1.7;
+  pointer-events:none;z-index:2}
+#noimg.on{display:flex}
+#noimg b{color:var(--dim);font-size:14px}
+#noimg code{font-family:var(--mono);font-size:11px;color:var(--dim)}
 
 /* grid + guides */
 #grid{position:absolute;inset:0;pointer-events:none;display:none;z-index:1}
@@ -272,6 +278,11 @@ footer .warnpill{color:var(--warn)} footer .okpill{color:var(--ok)}
     <div id="stageInner">
       <div id="canvas">
         <img id="page" alt="page">
+        <div id="noimg">
+          <b>Page image not bundled</b>
+          <span>Sample scans aren't committed (copyrighted publication content).<br>
+          Use <b>Add pages…</b> to load your own, or see <code>samples/README.md</code>.</span>
+        </div>
         <div id="grid"></div>
         <div id="gx" class="guide"><span class="glab"></span></div>
         <div id="gy" class="guide"><span class="glab"></span></div>

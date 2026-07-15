@@ -203,8 +203,14 @@ function keyRows(){
 function showPage(n){
   S.page=clamp(n,0,NPAGES-1); S.sel=[]; S.primary=null;
   const pg=S.project.pages[S.page];
-  img.onload=()=>{ S.natW=img.naturalWidth||1; S.natH=img.naturalHeight||1;
-    edgeCache[S.page]=edgeCache[S.page]; layout(); };
+  $("#noimg").classList.remove("on");
+  img.onload=()=>{ S.natW=img.naturalWidth||1; S.natH=img.naturalHeight||1; layout(); };
+  // Page scans aren't bundled (copyrighted; see samples/README.md). Fall back to a blank
+  // page at the project's dimensions so grid, blocks, snapping and export all still work.
+  img.onerror=()=>{ img.onerror=null; $("#noimg").classList.add("on");
+    const w=S.project.imageW||1707, h=S.project.imageH||1650;
+    const c=document.createElement("canvas"); c.width=w; c.height=h;
+    const x=c.getContext("2d"); x.fillStyle="#fff"; x.fillRect(0,0,w,h); img.src=c.toDataURL(); };
   img.src=pg.src+(pg.src.startsWith("data:")?"":("?"+Date.now()));
   $("#pageno").textContent=(S.page+1)+" / "+NPAGES;
 }
