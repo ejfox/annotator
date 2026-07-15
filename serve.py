@@ -45,7 +45,8 @@ class H(http.server.SimpleHTTPRequestHandler):
                 return round(os.path.getmtime(p), 3) if os.path.exists(p) else 0
             return self._json({"pred": mt("predictions.json"),
                                "code": max(mt("app.js"), mt("index.html"),
-                                           mt("types.json"), mt("papers.json"))})
+                                           mt("types.json"), mt("papers.json"),
+                                           mt("styles.css"))})
         if self.path.startswith("/api/load"):
             if os.path.exists(STORE):
                 try:

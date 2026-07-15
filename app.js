@@ -56,7 +56,7 @@ const S = {
   page:0, boxes:{}, pred:{}, undo:{}, redo:{}, uid:1,
   sel:[], primary:null, hover:null, clip:[],
   natW:1, natH:1, zoom:1,
-  snap:true, edgesOn:false, grid:false, gridMode:"4", defaultRole:{},
+  snap:true, edgesOn:false, grid:false, gridMode:"4", defaultRole:{}, mm:true,
   staticX:[], staticY:[],
   space:false, inspFor:""
 };
@@ -109,9 +109,10 @@ async function loadConfig(){
 function loadPrefs(){ try{ const p=JSON.parse(localStorage.getItem(LS_PREFS)||"{}");
   if(p.snap!=null)S.snap=p.snap; if(p.edgesOn!=null)S.edgesOn=p.edgesOn;
   if(p.grid!=null)S.grid=p.grid; if(p.gridMode)S.gridMode=p.gridMode;
+  if(p.mm!=null)S.mm=p.mm;
   if(p.defaultRole)S.defaultRole=p.defaultRole; }catch(e){} }
 function savePrefs(){ try{ localStorage.setItem(LS_PREFS,JSON.stringify({
-  snap:S.snap,edgesOn:S.edgesOn,grid:S.grid,gridMode:S.gridMode,defaultRole:S.defaultRole})); }catch(e){} }
+  snap:S.snap,edgesOn:S.edgesOn,grid:S.grid,gridMode:S.gridMode,mm:S.mm,defaultRole:S.defaultRole})); }catch(e){} }
 
 /* ============================================================ project */
 async function loadProject(pr){
@@ -124,7 +125,7 @@ async function loadProject(pr){
     S.boxes[i]=src.map(b=>({id:S.uid++,...normBox(b)})); S.undo[i]=[]; S.redo[i]=[];
   }
   $("#projTitle").value=pr.title||"Untitled";
-  buildPaperSel();
+  buildPaperSel(); buildMinimap();
   await loadAuto();
   // one-time AI first-pass: auto-fill any empty page that has a server prediction
   // (sample project only — predictions are Beach & Bay specific)
@@ -297,7 +298,7 @@ function redo(){ const r=S.redo[S.page]; if(!r.length) return;
   S.undo[S.page].push(JSON.stringify(S.boxes[S.page].map(normBox))); restore(r.pop()); renderAll(); save(); }
 
 /* ============================================================ rendering */
-function renderAll(){ computeSnaps(); renderBoxes(); renderGrid(); renderLayers(); renderInspector(); renderStatus(); }
+function renderAll(){ computeSnaps(); renderBoxes(); renderGrid(); renderLayers(); renderInspector(); renderStatus(); renderMinimap(); }
 function renderBoxes(){
   [...canvas.querySelectorAll(".box")].forEach(e=>e.remove());
   const k=scale(), single=S.sel.length===1;
@@ -448,6 +449,61 @@ function renderStatus(){
   $("#stOverlap").innerHTML = overlaps?`<span class="warnpill">⚠ ${overlaps} overlap${overlaps>1?"s":""}</span>`:`<span class="okpill">✓ no overlaps</span>`;
   $("#coverageHint").textContent = `${bs.length} frame${bs.length===1?"":"s"} · ${pct}% of content covered`;
 }
+
+/* ---------------- minimap ----------------
+ * The whole issue as black-and-white schematics. Deliberately no colour: block
+ * kind reads by MARK — solid = ad, ruled = editorial, hatched = filler, X =
+ * wild art — which stays legible at 46px where colour swatches would just mush.
+ * Cheap enough (16 tiny canvases) to redraw wholesale on commit. */
+const MM_W = 46;
+function buildMinimap(){
+  const g=$("#mmGrid"); if(!g) return;
+  g.innerHTML=""; const p=P(), h=Math.round(MM_W*p.pageH/p.pageW);
+  for(let i=0;i<NPAGES;i++){
+    const cell=document.createElement("button");
+    cell.className="mm"; cell.dataset.p=i; cell.title="Page "+(i+1);
+    const c=document.createElement("canvas");
+    c.width=MM_W*2; c.height=h*2; c.style.width=MM_W+"px"; c.style.height=h+"px";
+    const lab=document.createElement("span"); lab.textContent=i+1;
+    cell.appendChild(c); cell.appendChild(lab);
+    cell.onclick=()=>{ if(i!==S.page){ persist(); showPage(i); } };
+    g.appendChild(cell);
+  }
+}
+function renderMinimap(){
+  const cells=$$("#mmGrid .mm"); if(!cells.length) return;
+  cells.forEach((cell,i)=>{
+    const boxes=(S.boxes[i]||[]).filter(b=>!b.hidden);
+    cell.classList.toggle("on", i===S.page);
+    cell.classList.toggle("empty", boxes.length===0);
+    drawMini(cell.querySelector("canvas"), boxes);
+  });
+}
+function drawMini(c, boxes){
+  const ctx=c.getContext("2d"), W=c.width/2, H=c.height/2;
+  ctx.setTransform(2,0,0,2,0,0);
+  ctx.fillStyle="#fff"; ctx.fillRect(0,0,W,H);
+  const sx=W/(S.natW||1707), sy=H/(S.natH||1650);
+  for(const b of boxes){
+    const x=b.x*sx, y=b.y*sy, w=Math.max(1.5,b.w*sx), h=Math.max(1.5,b.h*sy);
+    const k=kindOf(b.cls);
+    ctx.save(); ctx.beginPath(); ctx.rect(x,y,w,h); ctx.clip();
+    if(k==="ad"){ ctx.fillStyle="#000"; ctx.fillRect(x,y,w,h); }
+    else if(k==="filler"){ ctx.strokeStyle="#000"; ctx.lineWidth=0.5;
+      for(let d=-h; d<w; d+=2.5){ ctx.beginPath(); ctx.moveTo(x+d,y+h); ctx.lineTo(x+d+h,y); ctx.stroke(); } }
+    else if(k==="wild-art"){ ctx.strokeStyle="#000"; ctx.lineWidth=0.6; ctx.beginPath();
+      ctx.moveTo(x,y); ctx.lineTo(x+w,y+h); ctx.moveTo(x+w,y); ctx.lineTo(x,y+h); ctx.stroke(); }
+    else { // editorial family — text rules; what-inside gets a solid header bar
+      ctx.fillStyle="#000";
+      if(k==="what-inside") ctx.fillRect(x,y,w,Math.min(2,h));
+      for(let yy=y+2.5; yy<y+h-1; yy+=2.5) ctx.fillRect(x+1, yy, Math.max(1,w-2), 0.7);
+    }
+    ctx.restore();
+    ctx.strokeStyle="#000"; ctx.lineWidth=0.6; ctx.strokeRect(x+0.3,y+0.3,w-0.6,h-0.6);
+  }
+  ctx.setTransform(1,0,0,1,0,0);
+}
+function toggleMinimap(){ S.mm=!S.mm; updateToggleUI(); savePrefs(); }
 
 /* ============================================================ interaction */
 let drag=null, panning=null;
@@ -664,7 +720,9 @@ function newFromFiles(files,append){
 let toastT=null;
 function toast(msg){ const t=$("#toast"); t.textContent=msg; t.classList.add("on");
   clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),1700); }
-function updateToggleUI(){ $("#snapToggle").classList.toggle("on",S.snap);
+function updateToggleUI(){
+  $("#minimap").classList.toggle("collapsed",!S.mm); $("#mmToggle").textContent=S.mm?"–":"+";
+  $("#snapToggle").classList.toggle("on",S.snap);
   $("#edgeToggle").classList.toggle("on",S.edgesOn);
   $("#gridToggle").classList.toggle("on",S.grid);
   $("#gridCols").textContent=S.gridMode+"-col"; $("#gridCols").classList.toggle("on",S.gridMode!==(P().defaultGrid||"4")); }
@@ -679,6 +737,7 @@ function bindUI(){
   $("#paperSel").onchange=e=>{ S.paperId=e.target.value; S.paper=PAPERS[S.paperId];
     if(!S.paper.grids[S.gridMode]) S.gridMode=S.paper.defaultGrid||Object.keys(S.paper.grids)[0];
     updateToggleUI(); renderAll(); save(); };
+  $("#mmToggle").onclick=toggleMinimap;
   $("#gridToggle").onclick=()=>{ S.grid=!S.grid; updateToggleUI(); renderGrid(); savePrefs(); };
   $("#gridCols").onclick=cycleGrid;
   $("#snapToggle").onclick=()=>{ S.snap=!S.snap; updateToggleUI(); savePrefs(); };
@@ -740,6 +799,7 @@ addEventListener("keydown",e=>{
   }
   if(k==="g") toggleAndSave("grid");
   else if(k==="s") toggleAndSave("snap");
+  else if(k==="m") toggleMinimap();
   else if(k==="c") cycleGrid();
   else if(BYKEY[k]) setClass(BYKEY[k]);
   else if(k==="delete"||k==="backspace"){ e.preventDefault(); deleteSel(); }
