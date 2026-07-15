@@ -409,6 +409,44 @@ export function seedPredictions({ once = true } = {}) {
   }
   return n
 }
+/**
+ * Seed EVERY known issue from predictions.json — not just the open one.
+ *
+ * seedPredictions() above only ever fills S.project, so an issue you had never
+ * opened stayed empty no matter how many predictions were published for it. The
+ * switcher would offer three issues and two of them held nothing, which reads as
+ * "the model didn't run" when in fact it ran and nobody visited the tab. Worse,
+ * it's silent: nothing anywhere says the blocks are sitting unseeded on disk.
+ *
+ * This works on stored annotations directly, so no project needs activating.
+ * Must run BEFORE the first activate() — activate() reads pr.annotations into
+ * S.boxes, and seedPredictions() then correctly skips the now-filled pages.
+ */
+export async function seedAllProjects() {
+  let all
+  try {
+    all = (await (await fetch('predictions.json', { cache: 'no-store' })).json())?.predictions
+  } catch { return 0 }
+  if (!all) return 0
+  let filled = 0
+  for (const id in S.projects) {
+    const pr = S.projects[id], forIssue = all[id]
+    if (!forIssue || !pr?.pages) continue
+    const seeded = (pr.seeded ||= {})
+    pr.annotations ||= {}
+    for (let i = 0; i < pr.pages.length; i++) {
+      if ((pr.annotations[i] || pr.annotations[String(i)] || []).length) continue
+      if (seeded[i]) continue
+      const blocks = forIssue[i] || forIssue[String(i)]
+      if (!blocks?.length) continue
+      pr.annotations[i] = blocks.map((b) =>
+        normBox({ ...b, cls: typeMap.value[b.cls] ? b.cls : S.types[0].id }))
+      seeded[i] = true
+      filled++
+    }
+  }
+  return filled
+}
 export function applyPrediction() {
   const a = S.pred[S.page]
   if (!a?.length) return toast('No AI blocks for this page yet')
@@ -527,9 +565,13 @@ export async function boot() {
   for (const iss of S.issues) if (!S.projects[iss.id]) S.projects[iss.id] = projectFromIssue(iss)
   if (!Object.keys(S.projects).length) S.projects[SAMPLE.id] = JSON.parse(JSON.stringify(SAMPLE))
 
+  // fill every issue that has predictions, not just the one we're about to open
+  const n = await seedAllProjects()
+
   const first = stored?.current && S.projects[stored.current] ? stored.current : Object.keys(S.projects)[0]
   await activate(first)
   persist()
+  if (n) toast(`AI first pass: ${n} pages seeded across your issues`)
 }
 
 export { SAMPLE }

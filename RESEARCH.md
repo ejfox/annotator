@@ -70,19 +70,59 @@ Source PDFs pulled from Times of San Diego's Heyzine flip-books; rendered at 150
 the claim that these SDCNG titles share one paper preset. The Beacon being **16 pages, like
 Beach & Bay** is itself a small result: the format is shared, not just the preset.
 
-## 4. Result 1 — the grid is real
+## 4. Result 1 — the grid is real on one axis, and was an artifact on the other
 
-Every block edge in the first issue lands on the same few lines, as a fraction of the
-content area:
+> **This section was substantially wrong until 2026-07-15 and is rewritten.** It claimed
+> both axes; only one survives. The retraction is kept in place rather than quietly edited,
+> because *how* it was wrong is the most transferable thing in this document.
 
-| axis | lines | edges on the 50% fold |
+### What went wrong
+
+Every grid number here was originally computed from **annotations** — blocks drawn by a
+human or a model, in an editor with **snap-to-grid on by default**, by an author who types
+round numbers (`x=75`, `y=825`, `w=1557`). Then the annotations were measured and found to
+be… on the grid.
+
+That is circular, and it is the same circularity flagged as threat #2 for the July 3 pages.
+It went unnoticed for longer on this axis because the output looked like a *measurement*
+rather than a recollection. It was neither: it was the tool's snap setting, read back.
+
+It surfaced only when EJ looked at a rendered page and said the blocks weren't lined up.
+The inspector showed `AD 367×359 at X=0 Y=353` — round, grid-perfect, and nowhere near the
+ink.
+
+### The honest test
+
+Ask the **pixels**, with no annotation in the loop. `detectEdges()` (ported from
+[`src/lib/edges.js`](src/lib/edges.js)) finds ink boundaries directly. Interior edges only —
+the page's outer bounds are trivially on the grid and would flatter any result:
+
+| corpus | vertical (columns) | horizontal (stacking) |
 |---|---|---|
-| vertical | 0 · 0.25 · **0.50** · 0.75 · 1.0 | 37 |
-| horizontal | 0 · **0.50** · 0.75 · 1.0 | 21 |
+| BBP May 8 | **65.6%** on grid · 21/64 on the 50% fold | 17.9% · 10/78 |
+| Peninsula Beacon | **80.4%** on grid · 28/56 on the 50% fold | 14.1% · 15/170 |
+| *chance baseline* | *6%* | *6%* |
 
-Nothing is freeform. Pages are cut in halves and quarters, and the **50% fold on both axes
-is the master line**. This is why per-page pixel error doesn't propagate: templates are
-authored to the grid, not to eyeballed coordinates.
+*(tolerance ±0.01 of the content dimension; 3 interior lines at .25/.50/.75)*
+
+**Vertical survives, decisively** — 11–13× chance, on two papers, measured from ink. And the
+50% fold really is the master line: half the Beacon's interior column edges sit exactly on
+it. No snapping can produce that; the detector never saw a block.
+
+**Horizontal does not.** 2–3× chance is a faint signal, not a grid. The annotation-derived
+figure said 79–91%; the ink says 14–24%. **That gap is the snapping.**
+
+### Why the split is believable
+
+It has a mechanism, which is the main reason to trust it over the tidier original claim.
+**Columns are rigid** — they are the paper preset, and everything on the page is set into
+them, so vertical edges have nowhere else to land. **Vertical position is fluid** — where a
+story ends depends on how long the copy ran. A newspaper is a column grid with things
+stacked into it at whatever height they happen to be, not a quarter-grid in both axes.
+
+So templates may be authored to the **column** grid with confidence. Authoring block
+*heights* to quarters is imposing a regularity the paper does not have — and every
+annotation in this repo did exactly that, by ~22px on average (median 22, max 48).
 
 ## 5. Result 2 — six shapes cover an issue (n=1)
 
@@ -231,30 +271,33 @@ matches everything is measuring nothing.
 | # | prediction | outcome |
 |---|---|---|
 | 1 | **<50%** of pages match at ≥0.5 | **HOLDS — 38%** (3/8) |
-| 2 | edges still land on the quarter grid | **HOLDS — 93% v / 82% h** |
+| 2 | edges still land on the quarter grid | **HOLDS on the vertical axis only** — see §4; the horizontal half of this prediction was scored against contaminated numbers and is withdrawn |
 
 ### The result
 
 Put the four corpora side by side, and the two things this project has been calling one
 finding come apart:
 
-| corpus | editorial distance | match ≥0.5 | grid v | grid h |
-|---|---|---|---|---|
-| BBP May 8 | *in-sample* | 13/13 | 97% | 79% |
-| BBP July 3 | same paper, +2 months | 15/15 | 100% | 91% |
-| Peninsula Beacon | different paper, same shop | **75%** | 94% | 85% |
-| San Diego Reader | different publication, same shop | **38%** | 93% | 82% |
+| corpus | editorial distance | match ≥0.5 | column grid *(ink-derived)* |
+|---|---|---|---|
+| BBP May 8 | *in-sample* | 13/13 | 66% |
+| BBP July 3 | same paper, +2 months | 15/15 | — |
+| Peninsula Beacon | different paper, same shop | **75%** | 80% |
+| San Diego Reader | different publication, same shop | **38%** | — |
 
-**Archetype match collapses monotonically — 100 → 100 → 75 → 38. Grid adherence does not
-move: 97 → 100 → 94 → 93.**
+**Archetype match collapses monotonically — 100 → 100 → 75 → 38. Column-grid adherence does
+not.** The grid column figures are the ink-derived ones from §4 (11–13× chance); the
+annotation-derived numbers this table used to carry were contaminated by snapping and are
+withdrawn. Per-issue ink figures for July 3 and the Reader are not yet computed — the two
+that are, on two different papers, already show the dissociation.
 
 That is a dissociation, and it is the most useful thing here. The grid and the archetypes
 co-varied perfectly in the n=1 data, so §4 and §5 read as two faces of one discovery. They
 are not:
 
-- **The grid is a property of the paper preset** — of production. Everything coming out of
-  this shop is cut on halves and quarters with the 50% fold dominant, regardless of who is
-  editing it. It survived intact on a publication whose shapes it could not describe.
+- **The column grid is a property of the paper preset** — of production. Everything coming
+  out of this shop is set into the same columns with the 50% fold dominant, regardless of who
+  is editing it. Block *heights* are not gridded (§4) — that half was an artifact.
 - **The archetypes are a property of the house style** — of editorial. They degrade exactly
   as fast as editorial distance grows.
 
@@ -280,15 +323,21 @@ Stated plainly, because the result is only worth what survives them.
    Identical scores follow trivially. They evidence that layouts repeat; they cannot also
    evidence that the matcher generalises. **p5 is the clean case** — annotated
    independently, genuinely different, still landed on the right family at "fair".
-3. **Most annotation is unreviewed model output.** Of 123 blocks across two issues, a human
+3. **Annotations are not measurements.** Every block in this repo was placed with snap-to-grid
+   on, and the model's coordinates were eyeballed off downscaled renders — they sat a median
+   **22px** (max 48) from the actual ink until re-derived from `detectEdges()` on 2026-07-15.
+   Any statistic computed *from annotations* inherits the tool's snapping and the author's
+   round numbers; §4 is what happens when you forget that. Statistics about the paper must
+   come from the pixels.
+4. **Most annotation is unreviewed model output.** Of 123 blocks across two issues, a human
    drew or corrected roughly 25. The archetypes are visually unmistakable and the grid
    absorbs coordinate error, but the block-level data is mostly not ground truth.
-4. **The matcher was validated on the data that produced it.** 13/13 is a *consistency*
+5. **The matcher was validated on the data that produced it.** 13/13 is a *consistency*
    check (can it invert its own derivation?), not a generalisation result. Section 7 is the
    generalisation result, and it is weaker: 3 strong of 15.
-5. **No template has ever been rendered.** They pass NewsWell's real capacity and grid math
+6. **No template has ever been rendered.** They pass NewsWell's real capacity and grid math
    (8 tests), which is not the same as producing a usable page.
-6. **Author is the instrument.** The same model proposed the archetypes, annotated the
+7. **Author is the instrument.** The same model proposed the archetypes, annotated the
    pages, and wrote the matcher that scores them. Independent annotation would be worth more
    than any additional issue.
 
@@ -337,10 +386,13 @@ archetypes are Beach & Bay's alone and the Beacon's 75% was luck.
 The original question — *does a newspaper have a grammar?* — has a sharper answer than
 expected, because the thing being measured turned out to be two things.
 
-- **Strong — the grid is universal to the shop.** 97 / 100 / 94 / 93% vertical adherence
-  across four corpora and three publications, including one whose shapes the library cannot
-  describe. Halves and quarters, 50% fold dominant. This is a production property and it
-  should be a paper preset.
+- **Strong — the COLUMN grid is universal to the shop.** 66% / 80% of interior *ink* edges
+  land on quarters against a 6% chance baseline, on two papers, with the 50% fold carrying
+  a third to a half of them. Measured from pixels, no annotation in the loop. This is a
+  production property and belongs in the paper preset.
+- **Retracted — the horizontal grid.** Block heights land on quarters at 2–3× chance, which
+  is not a grid. The original 79–91% figure measured the editor's snap setting and the
+  author's round numbers, not the newspaper (§4).
 - **Strong — the archetypes are a house style, not a law of newsprint.** They score 100% on
   Beach & Bay, 75% on a sister paper, 38% on a magazine from the same shop. That gradient is
   the finding. Anyone shipping these must scope them per-title.
@@ -350,8 +402,8 @@ expected, because the thing being measured turned out to be two things.
 - **Reasonable — the matcher's confidence is honest.** It abstains on both covers (0.19 /
   0.18, margins of 0.02 and 0.001), and its thin-margin signature located a real library gap
   (`LEAD_TOP_AD_FULL`, 5 sightings) rather than noise.
-- **Now known false:** the ≥80% cross-paper threshold; that the masthead sits on p2; and
-  that the Beacon is a 24-page paper (§3).
+- **Now known false:** the horizontal grid (§4); the ≥80% cross-paper threshold; that the
+  masthead sits on p2; and that the Beacon is a 24-page paper (§3).
 - **Still not tested:** a third title; whether any template renders a usable page in Studio.
   Six predictions have now been scored and the instrument is still its own author (threat #6),
   which remains the largest unaddressed weakness.
