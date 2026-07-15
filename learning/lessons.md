@@ -79,3 +79,39 @@ they legitimately diverge — checking a page's block count against
 `predictions.json` and "fixing" a mismatch would destroy his edits. Disk
 (`annotations.local.json`) is the truth; predictions get updated to match him,
 never the reverse.
+
+## n=2 — Beach & Bay Press, July 3 2026 (the generalization test)
+
+Scraped a second BBP issue and annotated pp.2–5 by applying the May-8 rules.
+Ran the May-8 templates against it — templates that had never seen this issue.
+
+| page | best archetype | score | reading |
+|---|---|---|---|
+| p2 | MASTHEAD_STORY | 0.583 | same masthead rail + story |
+| p3 | LEAD_TOP_ADS_BOTTOM | **0.937 strong** | story over two ads |
+| p4 | (SPLIT_ED_RIGHT) | 0.424 **weak** | correctly abstains — hybrid, like May 8's p4 |
+| p5 | SPLIT_EDITORIAL_LEFT | 0.603 fair | story left, ONE full-height ad right |
+
+**The finding is about the paper, not the model: it is formulaic.** July 3's p3
+carries *the same two advertisers in the same slots* as May 8's p3 (Marc D.
+Mabile left, Broken Yolk "Ciabatta" right). p2 is the same masthead rail. The
+archetypes recur because the paper recurs.
+
+**Honest caveat — p2/p3 are not independent evidence.** I recognised those
+layouts and applied May-8's geometry rather than measuring July-3's pixels, so
+of course they score identically. They demonstrate the layouts repeat; they
+can't also prove the matcher generalises.
+
+**p5 is the clean test.** Annotated independently, and it's genuinely *different*
+— one full-height ad where May 8 had two stacked. It still lands on the right
+archetype (SPLIT_EDITORIAL_LEFT) at 0.603 "fair" rather than 0.786 "strong". The
+score correctly says *same shape, not the same page*. That's the behaviour we
+want: recognise the family, flag the variance.
+
+**p4 abstains on both issues.** The hybrid we deliberately never shipped as a
+template stays unmatched — twice, in two different issues. Good reason to keep
+holding it.
+
+→ **New variant worth tracking:** SPLIT with ONE full-height ad vs two stacked.
+Seen on May 8 p8/p10 (ad side) and now July 3 p5 (editorial side). If it recurs,
+it's a real template, not a wobble.
