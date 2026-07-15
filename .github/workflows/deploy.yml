@@ -1,8 +1,11 @@
 name: Deploy to GitHub Pages
 
+# Manual on purpose. This can't succeed until Pages is enabled on the repo
+# (Settings → Pages → source: GitHub Actions) and DNS for the domain in
+# public/CNAME points at Pages. Until then a `push` trigger would just red-X
+# every commit, so: enable Pages, point DNS, then run this from the Actions tab
+# (or add the push trigger back).
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 
 permissions:

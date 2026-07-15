@@ -78,7 +78,9 @@ The dev server also provides `/api/load`, `/api/save` and `/api/version` via a p
 npm run build               # → dist/  (~160KB, no scans)
 ```
 
-Push to `main` → GitHub Pages via `.github/workflows/deploy.yml` (installs, builds, uploads `dist/`). Point a DNS CNAME at Pages; `public/CNAME` sets the custom domain.
+`.github/workflows/deploy.yml` installs, builds and uploads `dist/` to GitHub Pages. It's **manual-dispatch only** — it can't work until Pages is enabled (Settings → Pages → source: *GitHub Actions*) and DNS for the domain in `public/CNAME` points at Pages, and a `push` trigger would otherwise fail on every commit. Once both are set up, run it from the Actions tab or add the trigger back.
+
+Note the hosted app has no sample scans (they aren't committed), so it opens as bring-your-own-pages via **Add pages…**.
 
 ## Layout
 
